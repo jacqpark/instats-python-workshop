@@ -46,6 +46,9 @@ Files in [`day3/`](./day3/).
 - `session5_slides.html` and `session6_slides.html`.
 - `day3_finetune.ipynb`. The capstone. Train a left-right classifier with SetFit on a free T4,
   score it against the TF-IDF baseline you built on Day 2, apply it across a corpus, and save it.
+- The fallback checkpoint lives at
+  [`jacqpark/manifesto-RILE-setfit`](https://huggingface.co/jacqpark/manifesto-RILE-setfit). Load it
+  if your own training run stalls. No token needed.
 - `day3_lora_variant.ipynb`. The stretch notebook. The same job with the Hugging Face Trainer and a
   LoRA adapter.
 - `reproducibility_checklist.html` and its PDF. What to record before you write up a
