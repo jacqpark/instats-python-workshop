@@ -10,8 +10,10 @@ browser-based notebooks.
   through one deliberate error, and downloads the small embedding model Day 1 needs. You need no
   Manifesto Project account yet, we set that up together at the end of Day 1.
 - [`prework/encoder_cheatsheet.html`](./prework/encoder_cheatsheet.html). One page on what a
-  BERT-style encoder is, in plain language. No code.
-- [`prework/rosetta.html`](./prework/rosetta.html). The R to Python map. Keep it open all three days.
+  BERT-style encoder is, in plain language. No code. Print it from
+  [`encoder_cheatsheet.pdf`](./prework/encoder_cheatsheet.pdf).
+- [`prework/rosetta.html`](./prework/rosetta.html). The R to Python map. Keep it open all three
+  days, or print [`rosetta.pdf`](./prework/rosetta.pdf).
 
 ## Day 1. Python basics through a real chore
 
@@ -24,7 +26,7 @@ Files in [`day1/`](./day1/).
   A naive join gets 2 of 43, `difflib` gets 29, and sentence embeddings get 38.
 - `countries_worldbank.csv`, `countries_source.csv`, `toy_manifesto.csv`. The shipped data. No key
   and no GPU needed.
-- `glossary.html`. Day 1 terms.
+- `glossary.html` and `glossary.pdf`. Day 1 terms.
 
 ## Day 2. Classic text-as-data, then the encoder
 
@@ -35,7 +37,7 @@ Files in [`day2/`](./day2/).
   meet the Structural Topic Model by calling R's `stm` from Python through rpy2.
 - `day2_inputs.ipynb`. What a tokenizer does, what `input_ids` and `attention_mask` are, and how to
   assemble every input a trainer needs, stopping just short of training.
-- `glossary.html`. Topic model and tokenization terms.
+- `glossary.html` and `glossary.pdf`. Topic model and tokenization terms.
 
 ## Day 3. Fine-tune, evaluate honestly, ship
 
@@ -46,7 +48,10 @@ Files in [`day3/`](./day3/).
   score it against the TF-IDF baseline you built on Day 2, apply it across a corpus, and save it.
 - `day3_lora_variant.ipynb`. The stretch notebook. The same job with the Hugging Face Trainer and a
   LoRA adapter.
-- `reproducibility_checklist.html`. What to record before you write up a fine-tuned measure.
+- `reproducibility_checklist.html` and its PDF. What to record before you write up a
+  fine-tuned measure.
+
+Every one-pager ships as HTML and as a single-page A4 PDF, so you can read it on screen or print it.
 
 ## The helper module
 
