@@ -31,9 +31,12 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 th{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:left;
 color:rgba(15,27,61,.64);padding:0 10px 6px 0}
 td{padding:5px 10px 5px 0;border-top:2px dashed rgba(15,27,61,.28);vertical-align:top}
-code,.m{font-family:var(--mono);font-size:.88em;background:rgba(15,27,61,.09);padding:1px 5px;font-weight:700}
+code,.m{font-family:var(--mono);font-size:.88em;background:rgba(232,124,178,.26);
+padding:1px 5px;font-weight:700}
+.hl{background:linear-gradient(transparent 68%,var(--pink) 0);padding:0 .12em;font-weight:700}
 dl{margin:0}
-dt{font:700 13px var(--mono);color:var(--navy);margin-top:9px}
+dt{font:700 13px var(--mono);color:var(--navy);margin-top:10px}
+dt>span{background:linear-gradient(transparent 62%,var(--pink) 0);padding:0 .18em}
 dd{margin:1px 0 0;font-size:14px;color:rgba(15,27,61,.82)}
 ul{list-style:none}
 li{position:relative;padding-left:18px;margin-bottom:7px;font-size:14px}
@@ -44,7 +47,11 @@ box-shadow:5px 5px 0 var(--pink-hot);padding:14px 16px;margin-top:16px}
 .foot{margin-top:30px;border-top:2px dashed var(--navy);padding-top:9px;
 font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(15,27,61,.6);
 display:flex;justify-content:space-between}
-@media print{body{background:#fff;padding:0}.sheet{max-width:none}
+@page{size:A4 portrait;margin:11mm}
+@media print{body{background:#fff;padding:0;font-size:12.5px}.sheet{max-width:none}
+h1{font-size:31px}h2{font-size:15px;margin:17px 0 8px}
+td,dd,li,p{font-size:12px}dt{font-size:11.5px;margin-top:7px}
+table{font-size:12px}.sub{margin-bottom:16px}.foot{margin-top:18px}
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
@@ -53,8 +60,8 @@ display:flex;justify-content:space-between}
 <h1>Reproducibility<br>checklist</h1>
 <div class="sub">Everything to record before you write up a fine-tuned measure.</div>
 
-<p>A fine-tuned model is a measurement instrument, so it needs the same documentation any other
-instrument gets. Record these before you write up, because most of them are impossible to
+<p>A fine-tuned model is a <span class="hl">measurement instrument</span>, so it needs the same
+documentation any other instrument gets. Record these before you write up, because most of them are impossible to
 reconstruct afterwards.</p>
 
 <div class="cols"><div>

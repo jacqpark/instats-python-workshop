@@ -31,9 +31,12 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 th{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:left;
 color:rgba(15,27,61,.64);padding:0 10px 6px 0}
 td{padding:5px 10px 5px 0;border-top:2px dashed rgba(15,27,61,.28);vertical-align:top}
-code,.m{font-family:var(--mono);font-size:.88em;background:rgba(15,27,61,.09);padding:1px 5px;font-weight:700}
+code,.m{font-family:var(--mono);font-size:.88em;background:rgba(232,124,178,.26);
+padding:1px 5px;font-weight:700}
+.hl{background:linear-gradient(transparent 68%,var(--pink) 0);padding:0 .12em;font-weight:700}
 dl{margin:0}
-dt{font:700 13px var(--mono);color:var(--navy);margin-top:9px}
+dt{font:700 13px var(--mono);color:var(--navy);margin-top:10px}
+dt>span{background:linear-gradient(transparent 62%,var(--pink) 0);padding:0 .18em}
 dd{margin:1px 0 0;font-size:14px;color:rgba(15,27,61,.82)}
 ul{list-style:none}
 li{position:relative;padding-left:18px;margin-bottom:7px;font-size:14px}
@@ -44,7 +47,11 @@ box-shadow:5px 5px 0 var(--pink-hot);padding:14px 16px;margin-top:16px}
 .foot{margin-top:30px;border-top:2px dashed var(--navy);padding-top:9px;
 font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(15,27,61,.6);
 display:flex;justify-content:space-between}
-@media print{body{background:#fff;padding:0}.sheet{max-width:none}
+@page{size:A4 portrait;margin:11mm}
+@media print{body{background:#fff;padding:0;font-size:12.5px}.sheet{max-width:none}
+h1{font-size:31px}h2{font-size:15px;margin:17px 0 8px}
+td,dd,li,p{font-size:12px}dt{font-size:11.5px;margin-top:7px}
+table{font-size:12px}.sub{margin-bottom:16px}.foot{margin-top:18px}
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
@@ -52,7 +59,7 @@ display:flex;justify-content:space-between}
 <div class="tag">Day 2</div>
 <h1>Day 2 glossary</h1>
 <div class="sub">Topic models, and how a BERT model reads text.</div>
-<div class="cols"><div><dl><dt>Quasi-sentence</dt><dd>The Manifesto Project's unit of coding. One statement, one code.</dd><dt>cmp_code</dt><dd>The numeric Manifesto category, such as 504 for Welfare State Expansion.</dd><dt>RILE</dt><dd>The standard left-right scale. 13 codes on each side.</dd><dt>Preprocessing</dt><dd>Lowercasing, dropping stopwords, and counting, before any model runs.</dd><dt>Stopwords</dt><dd>Words carrying no topic signal. We also drop country and party names.</dd><dt>Document-term matrix</dt><dd>Rows are documents, columns are words, cells are counts.</dd><dt>CountVectorizer</dt><dd>The sklearn tool that builds that matrix.</dd><dt>TF-IDF</dt><dd>Counts, downweighted for words appearing everywhere. Day 3's baseline.</dd><dt>LDA</dt><dd>Latent Dirichlet Allocation. Finds groups of words that travel together.</dd><dt>Topic</dt><dd>A distribution over words. A policy area, and not a left-right score.</dd><dt>STM</dt><dd>Structural Topic Model. Lets a covariate like year shape topic prevalence.</dd><dt>rpy2</dt><dd>The bridge letting us call the R stm package from inside Python.</dd></dl></div><div><dl><dt>Tokenizer</dt><dd>Splits text into the chunks the model reads, and maps them to id numbers.</dd><dt>Token</dt><dd>One of those chunks. Often a whole word, sometimes a word piece.</dd><dt>input_ids</dt><dd>The list of id numbers for your sentence.</dd><dt>attention_mask</dt><dd>1 for a real token, 0 for padding. Tells the model what to ignore.</dd><dt>Padding</dt><dd>Adding filler so every row in a batch is the same length.</dd><dt>Truncation</dt><dd>Cutting text that runs past the limit.</dd><dt>512 tokens</dt><dd>The wall for BERT-family models. Longer documents get chunked.</dd><dt>[CLS] and [SEP]</dt><dd>Markers the tokenizer adds at the start and between segments.</dd><dt>Classification head</dt><dd>The small layer bolted on top that turns numbers into labels.</dd><dt>Logits</dt><dd>The raw scores the head produces, before any normalising.</dd><dt>Softmax</dt><dd>Turns logits into probabilities summing to 1.</dd><dt>Argmax</dt><dd>The position of the largest value, which is the predicted label.</dd></dl></div></div>
+<div class="cols"><div><dl><dt><span>Quasi-sentence</span></dt><dd>The Manifesto Project's unit of coding. One statement, one code.</dd><dt><span>cmp_code</span></dt><dd>The numeric Manifesto category, such as 504 for Welfare State Expansion.</dd><dt><span>RILE</span></dt><dd>The standard left-right scale. 13 codes on each side.</dd><dt><span>Preprocessing</span></dt><dd>Lowercasing, dropping stopwords, and counting, before any model runs.</dd><dt><span>Stopwords</span></dt><dd>Words carrying no topic signal. We also drop country and party names.</dd><dt><span>Document-term matrix</span></dt><dd>Rows are documents, columns are words, cells are counts.</dd><dt><span>CountVectorizer</span></dt><dd>The sklearn tool that builds that matrix.</dd><dt><span>TF-IDF</span></dt><dd>Counts, downweighted for words appearing everywhere. Day 3's baseline.</dd><dt><span>LDA</span></dt><dd>Latent Dirichlet Allocation. Finds groups of words that travel together.</dd><dt><span>Topic</span></dt><dd>A distribution over words. A policy area, and not a left-right score.</dd><dt><span>STM</span></dt><dd>Structural Topic Model. Lets a covariate like year shape topic prevalence.</dd><dt><span>rpy2</span></dt><dd>The bridge letting us call the R stm package from inside Python.</dd></dl></div><div><dl><dt><span>Tokenizer</span></dt><dd>Splits text into the chunks the model reads, and maps them to id numbers.</dd><dt><span>Token</span></dt><dd>One of those chunks. Often a whole word, sometimes a word piece.</dd><dt><span>input_ids</span></dt><dd>The list of id numbers for your sentence.</dd><dt><span>attention_mask</span></dt><dd>1 for a real token, 0 for padding. Tells the model what to ignore.</dd><dt><span>Padding</span></dt><dd>Adding filler so every row in a batch is the same length.</dd><dt><span>Truncation</span></dt><dd>Cutting text that runs past the limit.</dd><dt><span>512 tokens</span></dt><dd>The wall for BERT-family models. Longer documents get chunked.</dd><dt><span>[CLS] and [SEP]</span></dt><dd>Markers the tokenizer adds at the start and between segments.</dd><dt><span>Classification head</span></dt><dd>The small layer bolted on top that turns numbers into labels.</dd><dt><span>Logits</span></dt><dd>The raw scores the head produces, before any normalising.</dd><dt><span>Softmax</span></dt><dd>Turns logits into probabilities summing to 1.</dd><dt><span>Argmax</span></dt><dd>The position of the largest value, which is the predicted label.</dd></dl></div></div>
 <div class="foot"><span>Python Literacy for Text-as-Data</span><span>Day 2 of 3</span></div>
 </div></body>
 </html>

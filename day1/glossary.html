@@ -31,9 +31,12 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 th{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:left;
 color:rgba(15,27,61,.64);padding:0 10px 6px 0}
 td{padding:5px 10px 5px 0;border-top:2px dashed rgba(15,27,61,.28);vertical-align:top}
-code,.m{font-family:var(--mono);font-size:.88em;background:rgba(15,27,61,.09);padding:1px 5px;font-weight:700}
+code,.m{font-family:var(--mono);font-size:.88em;background:rgba(232,124,178,.26);
+padding:1px 5px;font-weight:700}
+.hl{background:linear-gradient(transparent 68%,var(--pink) 0);padding:0 .12em;font-weight:700}
 dl{margin:0}
-dt{font:700 13px var(--mono);color:var(--navy);margin-top:9px}
+dt{font:700 13px var(--mono);color:var(--navy);margin-top:10px}
+dt>span{background:linear-gradient(transparent 62%,var(--pink) 0);padding:0 .18em}
 dd{margin:1px 0 0;font-size:14px;color:rgba(15,27,61,.82)}
 ul{list-style:none}
 li{position:relative;padding-left:18px;margin-bottom:7px;font-size:14px}
@@ -44,7 +47,11 @@ box-shadow:5px 5px 0 var(--pink-hot);padding:14px 16px;margin-top:16px}
 .foot{margin-top:30px;border-top:2px dashed var(--navy);padding-top:9px;
 font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(15,27,61,.6);
 display:flex;justify-content:space-between}
-@media print{body{background:#fff;padding:0}.sheet{max-width:none}
+@page{size:A4 portrait;margin:11mm}
+@media print{body{background:#fff;padding:0;font-size:12.5px}.sheet{max-width:none}
+h1{font-size:31px}h2{font-size:15px;margin:17px 0 8px}
+td,dd,li,p{font-size:12px}dt{font-size:11.5px;margin-top:7px}
+table{font-size:12px}.sub{margin-bottom:16px}.foot{margin-top:18px}
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
@@ -52,7 +59,7 @@ display:flex;justify-content:space-between}
 <div class="tag">Day 1</div>
 <h1>Day 1 glossary</h1>
 <div class="sub">Python basics, pandas, and record linkage.</div>
-<div class="cols"><div><dl><dt>Cell</dt><dd>One block of code in a notebook. Run it with Shift and Enter.</dd><dt>Kernel</dt><dd>The Python process behind the notebook. It remembers everything you have run.</dd><dt>Runtime</dt><dd>The machine Colab gives you. Free CPU for Days 1 and 2, free T4 GPU for Day 3.</dd><dt>Variable</dt><dd>A name pointing at a value, made with <code>=</code>.</dd><dt>List</dt><dd>An ordered collection, written <code>[1, 2, 3]</code>. R's vector.</dd><dt>Dictionary</dt><dd>Key to value pairs, written <code>{'left': 0}</code>. Label maps live here.</dd><dt>Comprehension</dt><dd>Building a list in one line, <code>[f(i) for i in x]</code>. R's sapply.</dd><dt>Import</dt><dd>Loading a library once, near the top, for the whole session.</dd><dt>Indentation</dt><dd>Leading spaces that mark a block. In Python they are part of the grammar.</dd><dt>Traceback</dt><dd>The error report Python prints. The last line names the problem.</dd></dl></div><div><dl><dt>KeyError</dt><dd>You asked for a column or dictionary key that is not there. Check the spelling.</dd><dt>TypeError</dt><dd>You combined two incompatible types, such as text and a number.</dd><dt>DataFrame</dt><dd>A pandas table. R's data.frame.</dd><dt>Series</dt><dd>One column of a DataFrame.</dd><dt>value_counts</dt><dd>Counts of each distinct value in a column. R's table().</dd><dt>Record linkage</dt><dd>Joining two datasets that describe the same things under different names.</dd><dt>difflib</dt><dd>Python's built-in string similarity. Compares spelling, character by character.</dd><dt>Threshold</dt><dd>The similarity score above which you auto-accept a match. We use 0.8.</dd><dt>Crosswalk</dt><dd>A dictionary mapping one dataset's names onto another's.</dd><dt>Embedding</dt><dd>Numbers standing for meaning. Lets you match Burma to Myanmar.</dd><dt>Cosine similarity</dt><dd>How close two embeddings point in the same direction. 1 is identical.</dd></dl></div></div>
+<div class="cols"><div><dl><dt><span>Cell</span></dt><dd>One block of code in a notebook. Run it with Shift and Enter.</dd><dt><span>Kernel</span></dt><dd>The Python process behind the notebook. It remembers everything you have run.</dd><dt><span>Runtime</span></dt><dd>The machine Colab gives you. Free CPU for Days 1 and 2, free T4 GPU for Day 3.</dd><dt><span>Variable</span></dt><dd>A name pointing at a value, made with <code>=</code>.</dd><dt><span>List</span></dt><dd>An ordered collection, written <code>[1, 2, 3]</code>. R's vector.</dd><dt><span>Dictionary</span></dt><dd>Key to value pairs, written <code>{'left': 0}</code>. Label maps live here.</dd><dt><span>Comprehension</span></dt><dd>Building a list in one line, <code>[f(i) for i in x]</code>. R's sapply.</dd><dt><span>Import</span></dt><dd>Loading a library once, near the top, for the whole session.</dd><dt><span>Indentation</span></dt><dd>Leading spaces that mark a block. In Python they are part of the grammar.</dd><dt><span>Traceback</span></dt><dd>The error report Python prints. The last line names the problem.</dd></dl></div><div><dl><dt><span>KeyError</span></dt><dd>You asked for a column or dictionary key that is not there. Check the spelling.</dd><dt><span>TypeError</span></dt><dd>You combined two incompatible types, such as text and a number.</dd><dt><span>DataFrame</span></dt><dd>A pandas table. R's data.frame.</dd><dt><span>Series</span></dt><dd>One column of a DataFrame.</dd><dt><span>value_counts</span></dt><dd>Counts of each distinct value in a column. R's table().</dd><dt><span>Record linkage</span></dt><dd>Joining two datasets that describe the same things under different names.</dd><dt><span>difflib</span></dt><dd>Python's built-in string similarity. Compares spelling, character by character.</dd><dt><span>Threshold</span></dt><dd>The similarity score above which you auto-accept a match. We use 0.8.</dd><dt><span>Crosswalk</span></dt><dd>A dictionary mapping one dataset's names onto another's.</dd><dt><span>Embedding</span></dt><dd>Numbers standing for meaning. Lets you match Burma to Myanmar.</dd><dt><span>Cosine similarity</span></dt><dd>How close two embeddings point in the same direction. 1 is identical.</dd></dl></div></div>
 <div class="foot"><span>Python Literacy for Text-as-Data</span><span>Day 1 of 3</span></div>
 </div></body>
 </html>

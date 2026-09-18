@@ -31,9 +31,12 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 th{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:left;
 color:rgba(15,27,61,.64);padding:0 10px 6px 0}
 td{padding:5px 10px 5px 0;border-top:2px dashed rgba(15,27,61,.28);vertical-align:top}
-code,.m{font-family:var(--mono);font-size:.88em;background:rgba(15,27,61,.09);padding:1px 5px;font-weight:700}
+code,.m{font-family:var(--mono);font-size:.88em;background:rgba(232,124,178,.26);
+padding:1px 5px;font-weight:700}
+.hl{background:linear-gradient(transparent 68%,var(--pink) 0);padding:0 .12em;font-weight:700}
 dl{margin:0}
-dt{font:700 13px var(--mono);color:var(--navy);margin-top:9px}
+dt{font:700 13px var(--mono);color:var(--navy);margin-top:10px}
+dt>span{background:linear-gradient(transparent 62%,var(--pink) 0);padding:0 .18em}
 dd{margin:1px 0 0;font-size:14px;color:rgba(15,27,61,.82)}
 ul{list-style:none}
 li{position:relative;padding-left:18px;margin-bottom:7px;font-size:14px}
@@ -44,7 +47,11 @@ box-shadow:5px 5px 0 var(--pink-hot);padding:14px 16px;margin-top:16px}
 .foot{margin-top:30px;border-top:2px dashed var(--navy);padding-top:9px;
 font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(15,27,61,.6);
 display:flex;justify-content:space-between}
-@media print{body{background:#fff;padding:0}.sheet{max-width:none}
+@page{size:A4 portrait;margin:11mm}
+@media print{body{background:#fff;padding:0;font-size:12.5px}.sheet{max-width:none}
+h1{font-size:31px}h2{font-size:15px;margin:17px 0 8px}
+td,dd,li,p{font-size:12px}dt{font-size:11.5px;margin-top:7px}
+table{font-size:12px}.sub{margin-bottom:16px}.foot{margin-top:18px}
 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
@@ -59,30 +66,30 @@ different job. This workshop spends its time on the reading kind.</p>
 
 <h2>Words become numbers</h2>
 <p>A computer cannot compare two sentences directly, so the first move in any text-as-data pipeline
-turns text into numbers. The crude way counts words, which is what a bag of words does, and it
+turns text into numbers. The crude way counts words, which is what a <span class="hl">bag of words</span> does, and it
 throws away order and context. Under that scheme <span class="m">the tax cut helped workers</span>
 and <span class="m">workers cut the tax help</span> look identical.</p>
 <p>An encoder reads the whole sentence at once and gives every word a set of numbers shaped by the
 words around it. So <span class="m">bank</span> in a sentence about rivers comes out different from
-<span class="m">bank</span> in a sentence about lending. Those numbers are called embeddings.</p>
+<span class="m">bank</span> in a sentence about lending. Those numbers are called <span class="hl">embeddings</span>.</p>
 
 <h2>Why the name</h2>
 <p>The family is called BERT, short for Bidirectional Encoder Representations from Transformers.
-Bidirectional means it reads left to right and right to left together. Encoder means it compresses
+<span class="hl">Bidirectional</span> means it reads left to right and right to left together. <span class="hl">Encoder</span> means it compresses
 text into that numeric representation. You will meet BERT, RoBERTa and DeBERTa, all variants of the
 same idea, plus DistilBERT, a smaller and faster version.</p>
 
 <h2>What we do with it</h2>
 <p>An encoder on its own produces only numbers. To get a label you bolt a small classifier on top,
-show it examples, and let it learn the mapping from numbers to labels. That is fine-tuning, and it
+show it examples, and let it learn the mapping from numbers to labels. That is <span class="hl">fine-tuning</span>, and it
 is the Day 3 capstone. A model trained on a few hundred hand-coded sentences can then code hundreds
 of thousands, which is the reason to bother.</p>
 
 <div class="box"><h3>Three words to carry in</h3>
 <dl>
-<dt>Token</dt><dd>A chunk of text the model reads, usually a word or part of one.</dd>
-<dt>Embedding</dt><dd>The list of numbers standing for a token or a sentence.</dd>
-<dt>Fine-tuning</dt><dd>Training a pretrained model further on your own labeled examples.</dd>
+<dt><span>Token</span></dt><dd>A chunk of text the model reads, usually a word or part of one.</dd>
+<dt><span>Embedding</span></dt><dd>The list of numbers standing for a token or a sentence.</dd>
+<dt><span>Fine-tuning</span></dt><dd>Training a pretrained model further on your own labeled examples.</dd>
 </dl></div>
 
 <div class="foot"><span>Python Literacy for Text-as-Data</span><span>Prework 1 of 2</span></div>
