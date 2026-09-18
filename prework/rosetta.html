@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R to Python Rosetta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;700;800&family=Chakra+Petch:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0A0E27;--navy:#0F1B3D;--pink:#F0A6CA;--pink-hot:#E87CB2;--cyan:#5EDCF4;
+--yellow:#F4D03F;--lav:#E2D5F2;--white:#F8F4FF;
+--display:'Tektur','Courier New',monospace;--sans:'Chakra Petch','Helvetica Neue',Arial,sans-serif;
+--mono:'Space Mono','Courier New',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--lav);color:var(--navy);font:400 15px/1.5 var(--sans);
+background-image:linear-gradient(rgba(15,27,61,.07) 1px,transparent 1px),
+linear-gradient(90deg,rgba(15,27,61,.07) 1px,transparent 1px);background-size:14px 14px;
+-webkit-font-smoothing:antialiased;padding:34px 22px 50px}
+.sheet{max-width:940px;margin:0 auto}
+.tag{display:inline-block;font:700 11px var(--display);letter-spacing:.2em;text-transform:uppercase;
+background:var(--navy);color:var(--yellow);padding:7px 14px;margin-bottom:14px}
+h1{font:800 38px/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em;
+color:var(--navy);text-shadow:.045em .045em 0 var(--pink-hot);margin-bottom:6px}
+.sub{font:12px var(--mono);letter-spacing:.1em;color:rgba(15,27,61,.78);margin-bottom:26px}
+h2{font:800 17px var(--display);color:var(--navy);margin:26px 0 10px;
+border-bottom:2px dashed var(--navy);padding-bottom:7px}
+p{margin:0 0 9px;max-width:66em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:left;
+color:rgba(15,27,61,.64);padding:0 10px 6px 0}
+td{padding:5px 10px 5px 0;border-top:2px dashed rgba(15,27,61,.28);vertical-align:top}
+code,.m{font-family:var(--mono);font-size:.88em;background:rgba(15,27,61,.09);padding:1px 5px;font-weight:700}
+dl{margin:0}
+dt{font:700 13px var(--mono);color:var(--navy);margin-top:9px}
+dd{margin:1px 0 0;font-size:14px;color:rgba(15,27,61,.82)}
+ul{list-style:none}
+li{position:relative;padding-left:18px;margin-bottom:7px;font-size:14px}
+li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;background:var(--pink-hot)}
+.box{background:rgba(255,255,255,.55);border:2px solid var(--navy);
+box-shadow:5px 5px 0 var(--pink-hot);padding:14px 16px;margin-top:16px}
+.box h3{font:800 14px var(--display);margin-bottom:7px}
+.foot{margin-top:30px;border-top:2px dashed var(--navy);padding-top:9px;
+font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(15,27,61,.6);
+display:flex;justify-content:space-between}
+@media print{body{background:#fff;padding:0}.sheet{max-width:none}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body><div class="sheet">
+<div class="tag">Keep this open all three days</div>
+<h1>R to Python<br>Rosetta</h1>
+<div class="sub">The map from what you know to what you are typing.</div>
+
+<div class="cols"><div><table><thead><tr><th>In R</th><th>In Python</th><th>What it is</th></tr></thead><tbody><tr><td><code>x &lt;- 3</code></td><td><code>x = 3</code></td><td>assign</td></tr><tr><td><code>c(1, 2, 3)</code></td><td><code>[1, 2, 3]</code></td><td>a list</td></tr><tr><td><code>length(x)</code></td><td><code>len(x)</code></td><td>how many</td></tr><tr><td><code>x[1]</code></td><td><code>x[0]</code></td><td>first item, Python counts from 0</td></tr><tr><td><code>data.frame</code></td><td><code>DataFrame</code></td><td>a table, from pandas</td></tr><tr><td><code>df$col</code></td><td><code>df['col']</code></td><td>one column</td></tr><tr><td><code>nrow(df)</code></td><td><code>len(df)</code></td><td>row count</td></tr><tr><td><code>head(df)</code></td><td><code>df.head()</code></td><td>first rows</td></tr><tr><td><code>str(df)</code></td><td><code>df.info()</code></td><td>structure</td></tr><tr><td><code>summary(df)</code></td><td><code>df.describe()</code></td><td>summary stats</td></tr></tbody></table></div><div><table><thead><tr><th>In R</th><th>In Python</th><th>What it is</th></tr></thead><tbody><tr><td><code>table(x)</code></td><td><code>x.value_counts()</code></td><td>counts</td></tr><tr><td><code>df[df$x &gt; 1, ]</code></td><td><code>df[df['x'] &gt; 1]</code></td><td>filter rows</td></tr><tr><td><code>function(x) ...</code></td><td><code>def f(x): ...</code></td><td>a function</td></tr><tr><td><code>sapply(x, f)</code></td><td><code>[f(i) for i in x]</code></td><td>a comprehension</td></tr><tr><td><code>x %&gt;% f()</code></td><td><code>x.f()</code></td><td>method chaining</td></tr><tr><td><code>library(dplyr)</code></td><td><code>import pandas as pd</code></td><td>load a package</td></tr><tr><td><code>paste0('a','b')</code></td><td><code>f'{a}{b}'</code></td><td>join strings</td></tr><tr><td><code>is.na(x)</code></td><td><code>x.isna()</code></td><td>missing test</td></tr><tr><td><code>NA</code></td><td><code>None</code> or <code>NaN</code></td><td>missing</td></tr><tr><td><code>TRUE</code> / <code>FALSE</code></td><td><code>True</code> / <code>False</code></td><td>booleans</td></tr></tbody></table></div></div>
+
+<div class="box"><h3>Four things that will catch you</h3>
+<ul>
+<li>Python counts from 0. The first item is <code>x[0]</code>, and <code>x[0:2]</code> gives you
+two items, stopping before index 2.</li>
+<li>Indentation is syntax. The block under a <code>for</code> or <code>if</code> is whatever is
+indented beneath it, so a stray space is an error.</li>
+<li>There is no <code>&lt;-</code>. Assignment is <code>=</code>, and <code>==</code> is the test
+for equality.</li>
+<li>A dictionary is the object R has no clean equivalent for. Write it
+<code>{'left': 0, 'right': 1}</code> and read it with <code>d['left']</code>. Label maps,
+crosswalks and config all live in one.</li>
+</ul></div>
+
+<div class="foot"><span>Python Literacy for Text-as-Data</span><span>Prework 2 of 2</span></div>
+</div></body>
+</html>

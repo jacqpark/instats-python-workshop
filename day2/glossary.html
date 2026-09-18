@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2 glossary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;700;800&family=Chakra+Petch:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0A0E27;--navy:#0F1B3D;--pink:#F0A6CA;--pink-hot:#E87CB2;--cyan:#5EDCF4;
+--yellow:#F4D03F;--lav:#E2D5F2;--white:#F8F4FF;
+--display:'Tektur','Courier New',monospace;--sans:'Chakra Petch','Helvetica Neue',Arial,sans-serif;
+--mono:'Space Mono','Courier New',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--lav);color:var(--navy);font:400 15px/1.5 var(--sans);
+background-image:linear-gradient(rgba(15,27,61,.07) 1px,transparent 1px),
+linear-gradient(90deg,rgba(15,27,61,.07) 1px,transparent 1px);background-size:14px 14px;
+-webkit-font-smoothing:antialiased;padding:34px 22px 50px}
+.sheet{max-width:940px;margin:0 auto}
+.tag{display:inline-block;font:700 11px var(--display);letter-spacing:.2em;text-transform:uppercase;
+background:var(--navy);color:var(--yellow);padding:7px 14px;margin-bottom:14px}
+h1{font:800 38px/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em;
+color:var(--navy);text-shadow:.045em .045em 0 var(--pink-hot);margin-bottom:6px}
+.sub{font:12px var(--mono);letter-spacing:.1em;color:rgba(15,27,61,.78);margin-bottom:26px}
+h2{font:800 17px var(--display);color:var(--navy);margin:26px 0 10px;
+border-bottom:2px dashed var(--navy);padding-bottom:7px}
+p{margin:0 0 9px;max-width:66em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:left;
+color:rgba(15,27,61,.64);padding:0 10px 6px 0}
+td{padding:5px 10px 5px 0;border-top:2px dashed rgba(15,27,61,.28);vertical-align:top}
+code,.m{font-family:var(--mono);font-size:.88em;background:rgba(15,27,61,.09);padding:1px 5px;font-weight:700}
+dl{margin:0}
+dt{font:700 13px var(--mono);color:var(--navy);margin-top:9px}
+dd{margin:1px 0 0;font-size:14px;color:rgba(15,27,61,.82)}
+ul{list-style:none}
+li{position:relative;padding-left:18px;margin-bottom:7px;font-size:14px}
+li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;background:var(--pink-hot)}
+.box{background:rgba(255,255,255,.55);border:2px solid var(--navy);
+box-shadow:5px 5px 0 var(--pink-hot);padding:14px 16px;margin-top:16px}
+.box h3{font:800 14px var(--display);margin-bottom:7px}
+.foot{margin-top:30px;border-top:2px dashed var(--navy);padding-top:9px;
+font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(15,27,61,.6);
+display:flex;justify-content:space-between}
+@media print{body{background:#fff;padding:0}.sheet{max-width:none}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body><div class="sheet">
+<div class="tag">Day 2</div>
+<h1>Day 2 glossary</h1>
+<div class="sub">Topic models, and how a BERT model reads text.</div>
+<div class="cols"><div><dl><dt>Quasi-sentence</dt><dd>The Manifesto Project's unit of coding. One statement, one code.</dd><dt>cmp_code</dt><dd>The numeric Manifesto category, such as 504 for Welfare State Expansion.</dd><dt>RILE</dt><dd>The standard left-right scale. 13 codes on each side.</dd><dt>Preprocessing</dt><dd>Lowercasing, dropping stopwords, and counting, before any model runs.</dd><dt>Stopwords</dt><dd>Words carrying no topic signal. We also drop country and party names.</dd><dt>Document-term matrix</dt><dd>Rows are documents, columns are words, cells are counts.</dd><dt>CountVectorizer</dt><dd>The sklearn tool that builds that matrix.</dd><dt>TF-IDF</dt><dd>Counts, downweighted for words appearing everywhere. Day 3's baseline.</dd><dt>LDA</dt><dd>Latent Dirichlet Allocation. Finds groups of words that travel together.</dd><dt>Topic</dt><dd>A distribution over words. A policy area, and not a left-right score.</dd><dt>STM</dt><dd>Structural Topic Model. Lets a covariate like year shape topic prevalence.</dd><dt>rpy2</dt><dd>The bridge letting us call the R stm package from inside Python.</dd></dl></div><div><dl><dt>Tokenizer</dt><dd>Splits text into the chunks the model reads, and maps them to id numbers.</dd><dt>Token</dt><dd>One of those chunks. Often a whole word, sometimes a word piece.</dd><dt>input_ids</dt><dd>The list of id numbers for your sentence.</dd><dt>attention_mask</dt><dd>1 for a real token, 0 for padding. Tells the model what to ignore.</dd><dt>Padding</dt><dd>Adding filler so every row in a batch is the same length.</dd><dt>Truncation</dt><dd>Cutting text that runs past the limit.</dd><dt>512 tokens</dt><dd>The wall for BERT-family models. Longer documents get chunked.</dd><dt>[CLS] and [SEP]</dt><dd>Markers the tokenizer adds at the start and between segments.</dd><dt>Classification head</dt><dd>The small layer bolted on top that turns numbers into labels.</dd><dt>Logits</dt><dd>The raw scores the head produces, before any normalising.</dd><dt>Softmax</dt><dd>Turns logits into probabilities summing to 1.</dd><dt>Argmax</dt><dd>The position of the largest value, which is the predicted label.</dd></dl></div></div>
+<div class="foot"><span>Python Literacy for Text-as-Data</span><span>Day 2 of 3</span></div>
+</div></body>
+</html>

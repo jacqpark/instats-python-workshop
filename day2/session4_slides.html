@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2 &middot; Session 4 &middot; How BERT Reads Text and Builds Inputs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;700;800&family=Chakra+Petch:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* 8-Bit Orbit. Same brand constants, fonts and theme tokens as
+   jacqpark.github.io/assets/css/style.css and the CP Fall 2026 decks.
+   Ported onto this deck's fixed 1280x720 stage, so slide markup is unchanged. */
+
+:root {
+  --void:     #0A0E27;
+  --navy:     #0F1B3D;
+  --deepnavy: #131D45;
+  --pink:     #F0A6CA;
+  --pink-hot: #E87CB2;
+  --cyan:     #5EDCF4;
+  --yellow:   #F4D03F;
+  --lav:      #E2D5F2;
+  --white:    #F8F4FF;
+
+  --display: 'Tektur', 'Courier New', monospace;
+  --sans:    'Chakra Petch', 'Helvetica Neue', Arial, sans-serif;
+  --mono:    'Space Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%; width: 100%; overflow: hidden;
+  background: var(--void);
+  -webkit-font-smoothing: antialiased;
+}
+.deck { position: relative; width: 100vw; height: 100vh; }
+p { margin: 0 0 .6em; }
+p:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------- the stage and its themes */
+.slide {
+  position: absolute; top: 50%; left: 50%;
+  width: 1280px; height: 720px;
+  transform: translate(-50%, -50%) scale(var(--s, 1));
+  transform-origin: center center;
+  /* 1% of the 1280px stage, so every em matches the site deck exactly */
+  --u: 12.8px;
+  font: 400 calc(var(--u) * 1.35)/1.5 var(--sans);
+  padding: 4.2em 5em 3.6em;
+  display: flex; flex-direction: column; justify-content: center;
+  opacity: 0; visibility: hidden; overflow: hidden;
+  background-color: var(--bg); color: var(--fg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+}
+.slide.active { opacity: 1; visibility: visible; }
+.slide > * { position: relative; z-index: 2; }
+
+.navy, .slide.dark, .slide-title {
+  --bg: var(--void); --fg: var(--lav); --strong: var(--white); --muted: rgba(226,213,242,.66);
+  --h: var(--cyan); --hs: var(--yellow); --card: rgba(15,27,61,.78); --line: rgba(94,220,244,.5);
+  --shadow: var(--pink); --grid: rgba(94,220,244,.05); --cell: calc(var(--u) * 2);
+}
+.lav {
+  --bg: var(--lav); --fg: var(--navy); --strong: var(--navy); --muted: rgba(15,27,61,.64);
+  --h: var(--navy); --hs: var(--pink-hot); --card: rgba(255,255,255,.55); --line: var(--navy);
+  --shadow: var(--pink-hot); --grid: rgba(15,27,61,.07); --cell: calc(var(--u) * 1.1);
+}
+.pink {
+  --bg: var(--pink); --fg: var(--navy); --strong: var(--navy); --muted: rgba(15,27,61,.7);
+  --h: var(--navy); --hs: var(--cyan); --card: rgba(255,255,255,.45); --line: var(--navy);
+  --shadow: var(--cyan); --grid: rgba(15,27,61,.08); --cell: calc(var(--u) * 1.1);
+}
+
+/* pixel stars, scanlines and vignette on the navy slides */
+.navy::before, .navy::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.navy::before {
+  background:
+    linear-gradient(var(--cyan),var(--cyan)) 7% 12%/4px 4px,
+    linear-gradient(var(--yellow),var(--yellow)) 19% 30%/3px 3px,
+    linear-gradient(var(--pink),var(--pink)) 12% 78%/5px 5px,
+    linear-gradient(var(--cyan),var(--cyan)) 28% 88%/3px 3px,
+    linear-gradient(var(--yellow),var(--yellow)) 36% 9%/4px 4px,
+    linear-gradient(var(--pink),var(--pink)) 44% 64%/3px 3px,
+    linear-gradient(var(--cyan),var(--cyan)) 52% 94%/5px 5px,
+    linear-gradient(var(--yellow),var(--yellow)) 58% 17%/3px 3px,
+    linear-gradient(var(--pink),var(--pink)) 66% 41%/4px 4px,
+    linear-gradient(var(--cyan),var(--cyan)) 73% 7%/3px 3px,
+    linear-gradient(var(--yellow),var(--yellow)) 81% 71%/5px 5px,
+    linear-gradient(var(--pink),var(--pink)) 88% 24%/3px 3px,
+    linear-gradient(var(--cyan),var(--cyan)) 94% 56%/4px 4px,
+    linear-gradient(var(--yellow),var(--yellow)) 4% 50%/3px 3px,
+    linear-gradient(var(--cyan),var(--cyan)) 85% 92%/3px 3px,
+    linear-gradient(var(--pink),var(--pink)) 24% 55%/3px 3px;
+  background-repeat: no-repeat; opacity: .55;
+  animation: twinkle 3.2s steps(2) infinite;
+}
+.navy::after {
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0,0,0,.14) 3px, transparent 4px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%);
+}
+@keyframes twinkle { 50% { opacity: .3; } }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ----------------------------------------------------------------- type */
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.05; }
+h1 {
+  font-size: 4.4em; font-weight: 800; text-transform: uppercase; letter-spacing: .02em;
+  color: var(--h); text-shadow: .045em .045em 0 var(--hs);
+}
+h2 { font-size: 2.35em; font-weight: 800; color: var(--h); text-shadow: .06em .06em 0 var(--hs); }
+h3 { font-size: 1.05em; font-weight: 700; color: var(--strong); margin-bottom: .45em; }
+
+.lede { font-size: 1.25em; color: var(--fg); margin: 0 0 .8em; max-width: 46em; }
+.small { font-size: .82em; color: var(--muted); }
+.muted { color: var(--muted); }
+
+/* eyebrow is the site's .tag */
+.eyebrow {
+  display: inline-block; align-self: flex-start;
+  font: 700 .68em var(--display); letter-spacing: .2em; text-transform: uppercase;
+  background: var(--navy); color: var(--yellow); padding: .5em 1.1em; margin-bottom: 1em;
+}
+.navy .eyebrow, .slide.dark .eyebrow, .slide-title .eyebrow {
+  background: transparent; border: 2px solid var(--yellow);
+}
+
+/* the title slide's top line is the site's .kicker */
+.corner {
+  position: absolute; top: 2.4em; left: 5em; z-index: 3;
+  font: 700 .8em var(--mono); letter-spacing: .42em; text-transform: uppercase; color: var(--pink);
+}
+
+/* a pixel divider, in the spirit of the dashed rules used across the site */
+.rule {
+  width: 5em; height: .35em; background: var(--hs); flex: none;
+  margin: .2em 0 1.1em;
+}
+
+/* the site's marker-pen highlight. It sits at 55% on the big .bio text there,
+   which would cut through the middle of list text at this size, so it drops. */
+.highlight {
+  font-weight: 700; color: var(--strong);
+  background: linear-gradient(transparent 72%, var(--hs) 0); padding: 0 .1em;
+}
+
+.label {
+  font: 700 .66em var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: .5em;
+}
+.navy .label, .slide.dark .label, .slide-title .label { color: var(--cyan); }
+
+/* --------------------------------------------------------------- blocks */
+.two-col   { display: grid; gap: 1.6em; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.three-col { display: grid; gap: 1.3em; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.card {
+  background: var(--card); border: 2px solid var(--line); padding: 1.1em 1.25em;
+  box-shadow: .3em .3em 0 var(--shadow); font-size: .9em;
+}
+.card p:last-child { margin-bottom: 0; }
+
+ul.bare { list-style: none; }
+ul.bare li { position: relative; padding-left: 1.2em; margin-bottom: .45em; font-size: 1.05em; }
+ul.bare li::before {
+  content: ""; position: absolute; left: 0; top: .55em;
+  width: .45em; height: .45em; background: var(--shadow);
+}
+
+/* ----------------------------------------------------------------- code */
+pre, code { font-family: var(--mono); }
+pre {
+  background: rgba(10,14,39,.92); color: var(--lav);
+  border: 2px solid var(--cyan); box-shadow: .3em .3em 0 var(--shadow);
+  padding: 1em 1.2em; font-size: .82em; line-height: 1.65;
+  white-space: pre; overflow: hidden;
+}
+code {
+  font-size: .88em; background: rgba(15,27,61,.1); color: var(--strong);
+  padding: .1em .35em; font-weight: 700;
+}
+.navy code, .slide.dark code, .slide-title code { background: rgba(94,220,244,.16); color: var(--cyan); }
+pre code { background: none; padding: 0; color: inherit; font-weight: 400; }
+
+pre .com { color: rgba(226,213,242,.45); }
+pre .str { color: var(--yellow); }
+pre .fn  { color: var(--cyan); }
+pre .kw  { color: var(--pink-hot); }
+
+/* --------------------------------------------------------------- tables */
+table { width: 100%; border-collapse: collapse; font-size: .9em; }
+th {
+  font: 700 .66em var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  text-align: left; color: var(--muted); padding: 0 1em .6em 0;
+}
+td { padding: .55em 1em .55em 0; border-top: 2px dashed var(--line); vertical-align: top; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+/* the hit gets the site's pixel marker, the miss gets struck through. A
+   background highlight would fill the whole cell, so it stays inline. */
+td.encoder { font-weight: 700; color: var(--strong); }
+td.encoder::before {
+  content: ""; display: inline-block; width: .45em; height: .45em;
+  background: var(--shadow); margin-right: .55em; vertical-align: .05em;
+}
+td.decoder { color: var(--muted); text-decoration: line-through; }
+
+/* ------------------------------------------------------------ bar rows */
+.bars { display: flex; flex-direction: column; gap: .7em; }
+.bar-row { display: grid; grid-template-columns: 14em 1fr 5em; gap: .9em; align-items: center; }
+.bar-row .name { font: 700 .72em var(--mono); text-align: right; color: var(--fg); }
+.track {
+  display: block; height: 1.5em; background: rgba(255,255,255,.35);
+  border: 2px solid var(--line); position: relative;
+}
+.navy .track, .slide.dark .track { background: rgba(15,27,61,.6); }
+.fill { display: block; height: 100%; background: var(--navy); }
+.navy .fill, .slide.dark .fill { background: var(--cyan); }
+.fill.warm  { background: var(--pink-hot); }
+.fill.cool  { background: var(--cyan); }
+.fill.muted { background: rgba(15,27,61,.32); }
+.navy .fill.muted, .slide.dark .fill.muted { background: rgba(226,213,242,.3); }
+.bar-row .val { font: 700 .82em var(--mono); color: var(--strong); }
+
+/* ---------------------------------------------------------- title slide */
+.slide-title-inner { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+.slide-title .lede { color: var(--muted); margin-top: 1em; }
+.slide-title .meta { display: flex; gap: 2.6em; margin-top: 2.2em; font: .78em var(--mono); color: var(--fg); }
+.slide-title .meta .label { display: block; margin-bottom: .4em; }
+
+/* ------------------------------------------ welcome and recording markers */
+.slide-welcome { align-items: center; text-align: center; }
+.slide-welcome h1 { font-size: 7em; }
+/* the Instats mark is dark blue, so it sits on a plate to clear the void */
+.slide-welcome .brand {
+  height: 7em; box-sizing: content-box; margin: 1.3em 0 1.5em;
+  padding: .75em 1.2em; background: var(--white);
+  border: 2px solid var(--cyan); box-shadow: .3em .3em 0 var(--pink);
+}
+.slide-welcome .standby {
+  margin: 0; font: 700 .82em var(--mono);
+  letter-spacing: .3em; text-transform: uppercase; color: var(--cyan);
+}
+.slide-welcome .standby::after {
+  content: "_"; margin-left: .25em; animation: blink 1.2s steps(1) infinite;
+}
+
+.slide-marker { align-items: center; justify-content: center; padding: 0; }
+.slide-marker h1 { font-size: 10em; letter-spacing: .05em; }
+
+/* --------------------------------------------------------------- chrome */
+.slide-footer {
+  position: absolute; left: 5em; right: 5em; bottom: 1.7em;
+  display: flex; justify-content: space-between; align-items: center;
+  font: 700 .62em var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); border-top: 2px dashed var(--line); padding-top: .9em;
+}
+.slide-footer span:last-child { color: var(--strong); }
+
+.hud {
+  position: fixed; z-index: 10; bottom: 1.1em; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: .6em;
+}
+.hud button {
+  cursor: pointer; font: 700 .62rem var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  background: rgba(15,27,61,.9); color: var(--white); border: 2px solid var(--cyan);
+  padding: .7em 1.1em;
+  transition: transform .15s steps(3), box-shadow .15s steps(3);
+}
+.hud button:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 var(--pink); }
+.hud #counter {
+  font: 700 .72rem var(--mono); letter-spacing: .2em;
+  background: rgba(15,27,61,.9); color: var(--cyan); padding: .6em 1.2em;
+}
+
+.progress-bar {
+  position: fixed; bottom: 0; left: 0; height: 4px;
+  background: var(--yellow); z-index: 10; transition: width .35s steps(6);
+}
+
+.help-text {
+  position: fixed; z-index: 10; bottom: 1.3em; right: 1.4em;
+  font: .58rem var(--mono); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--cyan); background: rgba(15,27,61,.7); padding: .3em .6em;
+}
+
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="help-text">arrows to move, F for fullscreen</div>
+<div class="deck" id="deck">
+
+<!-- WELCOME -->
+<section class="slide slide-welcome active navy">
+  <div class="corner">Day 02 / 03 &middot; Session 4</div>
+  <h1>Welcome to</h1>
+  <img class="brand" src="../instats_logo.png" alt="Instats">
+  <p class="standby">The session will begin shortly</p>
+</section>
+<!-- START -->
+<section class="slide slide-marker pink">
+  <h1>Start</h1>
+</section>
+<section class="slide slide-title navy">
+  <div class="slide-title-inner">
+    <div class="corner">Day 02 / 03 &middot; Session 4</div>
+    <div style="margin-top: 88px;">
+      <div class="eyebrow">Python Literacy for Text-as-Data</div>
+      <h1>How BERT Reads Text,<br>and Builds Inputs.</h1>
+      <p class="lede">Open the encoder, read what the tokenizer produces, and assemble every ingredient a trainer needs.</p>
+    </div>
+    <div class="meta">
+      <div><span class="label">Instructor</span>Jihye Park, University of Geneva</div>
+      <div><span class="label">Model</span>DistilBERT on the CPU</div>
+      <div><span class="label">Session</span>4 of 6</div>
+    </div>
+  </div>
+</section>
+<section class="slide lav">
+  <div class="eyebrow">Why context matters</div>
+  <h2>The same word,<br>two meanings.</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div class="col">
+      <p>A bag of words gives <code>bank</code> one number. An encoder reads the words around it, so <code>river bank</code> and <code>central bank</code> get different vectors.</p>
+      <p>That context is what a topic model threw away, and what makes the encoder worth learning.</p>
+    </div>
+    <pre>river <span class="highlight">bank</span>   &rarr; one vector
+central <span class="highlight">bank</span> &rarr; a different vector
+
+<span class="com"># context changes the meaning</span></pre>
+  </div>
+  <div class="slide-footer"><span>Session 4, Context</span><span>02 / 10</span></div>
+</section>
+<section class="slide pink">
+  <div class="eyebrow">What a BERT model is</div>
+  <h2>A bidirectional encoder.</h2>
+  <div class="rule"></div>
+  <ul class="bare">
+    <li>Pretrained by hiding words and learning to fill them in.</li>
+    <li>It reads left and right at once, so every word sees its whole sentence.</li>
+    <li>The family. BERT, RoBERTa, DeBERTa, the multilingual XLM-R, the smaller DistilBERT.</li>
+    <li>A classification head is a small layer on top that turns vectors into a label.</li>
+  </ul>
+  <div class="slide-footer"><span>Session 4, The model</span><span>03 / 10</span></div>
+</section>
+<section class="slide navy">
+  <div class="eyebrow">Tokenization</div>
+  <h2>Text becomes input_ids.</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <pre>tok(<span class="str">'Expand public healthcare.'</span>)
+
+input_ids: [<span class="str">101</span>, <span class="str">7818</span>, <span class="str">2270</span>, ...]
+tokens: [<span class="str">'[CLS]'</span>, <span class="str">'expand'</span>,
+         <span class="str">'public'</span>, ...]</pre>
+    <div class="col">
+      <p>A model reads token ids. The tokenizer splits text into subword tokens and looks up each one. The attention mask marks which tokens are real.</p>
+      <p class="small">Load the tokenizer that matches your model. They are a pair.</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Session 4, Tokenizer</span><span>04 / 10</span></div>
+</section>
+<section class="slide lav">
+  <div class="eyebrow">Padding, truncation, the wall</div>
+  <h2>Batches are rectangles.</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div class="col">
+      <p>Short sentences are padded, long ones are truncated, so every row is the same length and they stack into a batch.</p>
+      <p>BERT models cap at <span class="highlight">512 tokens</span>. Longer documents get chunked, which is how you scale to whole speeches.</p>
+    </div>
+    <pre>tok(sentences,
+    padding=<span class="kw">True</span>,
+    truncation=<span class="kw">True</span>,
+    max_length=<span class="str">128</span>)</pre>
+  </div>
+  <div class="slide-footer"><span>Session 4, The 512 wall</span><span>05 / 10</span></div>
+</section>
+<section class="slide pink">
+  <div class="eyebrow">Assemble the inputs</div>
+  <h2>A Dataset, tokenized.</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <pre><span class="kw">from</span> datasets <span class="kw">import</span> Dataset
+ds = Dataset.<span class="fn">from_pandas</span>(df)
+ds = ds.<span class="fn">map</span>(tok, batched=<span class="kw">True</span>)
+ds = ds.<span class="fn">train_test_split</span>(test_size=<span class="str">0.2</span>)</pre>
+    <div class="col">
+      <p>The Hugging Face Dataset is the table a trainer expects. Wrap the DataFrame, map the tokenizer over every row, then hold out a test set now so tomorrow's score is honest.</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Session 4, Dataset</span><span>06 / 10</span></div>
+</section>
+<section class="slide navy">
+  <div class="eyebrow">The model with a head</div>
+  <h2>One forward pass.</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div class="col">
+      <p>Load the encoder with a fresh two-class head and run three sentences through it. The head is untrained, so the numbers are meaningless. The shapes are the point.</p>
+      <p class="small">Logits become probabilities with softmax, and argmax picks the class.</p>
+    </div>
+    <pre>logits = model(**batch).logits
+<span class="com"># shape [3, 2]</span>
+probs = logits.<span class="fn">softmax</span>(-<span class="str">1</span>)
+probs.<span class="fn">argmax</span>(-<span class="str">1</span>)</pre>
+  </div>
+  <div class="slide-footer"><span>Session 4, Forward pass</span><span>07 / 10</span></div>
+</section>
+<section class="slide lav">
+  <div class="eyebrow">Hands-on</div>
+  <h2>Build every input,<br>stop before training.</h2>
+  <div class="rule"></div>
+  <p>Your turn. Tokenize a sentence and read the ids, build the Dataset and the split, load the model with its head, and run one forward pass to see the logits.</p>
+  <p class="small">Fix the seed. Two runs of the same cell should give identical shapes and labels.</p>
+  <div class="slide-footer"><span>Session 4, Hands-on</span><span>08 / 10</span></div>
+</section>
+<section class="slide pink">
+  <div class="eyebrow">Where we are</div>
+  <h2>Every ingredient<br>is on the table.</h2>
+  <div class="rule"></div>
+  <p class="lede" style="max-width: 900px;">A tokenized Dataset, a train-test split, and a model with a head. Tomorrow you train that head and prove it beats the baseline you built today.</p>
+  <div class="slide-footer"><span>Session 4, The bridge</span><span>09 / 10</span></div>
+</section>
+<section class="slide dark navy">
+  <div class="eyebrow">Session 4 recap</div>
+  <h2>You opened the encoder.</h2>
+  <div class="rule"></div>
+  <ul class="bare">
+    <li>You saw why context beats a bag of words.</li>
+    <li>You read what the tokenizer produces, and met the 512 wall.</li>
+    <li>You assembled a Dataset, a split, and a model with a head.</li>
+  </ul>
+  <p class="lede" style="margin-top: 24px; font-size: 26px;">Tomorrow, the capstone. You fine-tune it.</p>
+  <div class="slide-footer"><span>Session 4, Recap</span><span>10 / 10</span></div>
+</section>
+
+<!-- STOP -->
+<section class="slide slide-marker pink">
+  <h1>Stop</h1>
+</section>
+</div>
+<div class="hud">
+  <button id="prev">PREV</button>
+  <span id="counter">1 / 18</span>
+  <button id="next">NEXT</button>
+</div>
+<div class="progress-bar" id="bar" style="width: 5.56%"></div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let idx = 0;
+
+// --- presenter-monitor sync ---
+const SYNC_DAY = 2;
+const SYNC_KEY = 'workshop-sync';
+const slideNums = slides.map(s => {
+  let n = s.previousSibling;
+  while (n && n.nodeType !== 8 /* COMMENT_NODE */) n = n.previousSibling;
+  const m = n && n.nodeValue && n.nodeValue.match(/^\s*(\d+)\./);
+  return m ? parseInt(m[1], 10) : null;
+});
+const syncChannel = ('BroadcastChannel' in window) ? new BroadcastChannel(SYNC_KEY) : null;
+function publishSync() {
+  const num = slideNums[idx];
+  if (num == null) return;
+  const payload = { day: SYNC_DAY, slide: num, t: Date.now() };
+  if (syncChannel) syncChannel.postMessage(payload);
+  try { localStorage.setItem(SYNC_KEY, JSON.stringify(payload)); } catch (_) {}
+}
+if (syncChannel) {
+  syncChannel.addEventListener('message', e => {
+    if (e.data && e.data.request === 'current') publishSync();
+  });
+}
+
+function fit() {
+  const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.95;
+  document.documentElement.style.setProperty('--s', s);
+}
+window.addEventListener('resize', fit);
+fit();
+
+function show(i) {
+  i = Math.max(0, Math.min(i, total - 1));
+  slides[idx].classList.remove('active');
+  slides[i].classList.add('active');
+  idx = i;
+  document.getElementById('counter').textContent = `${idx+1} / ${total}`;
+  document.getElementById('bar').style.width = `${((idx+1)/total)*100}%`;
+  history.replaceState(null, '', `#${idx+1}`);
+  publishSync();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { show(idx+1); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { show(idx-1); e.preventDefault(); }
+  else if (e.key === 'Home') { show(0); e.preventDefault(); }
+  else if (e.key === 'End') { show(total-1); e.preventDefault(); }
+  else if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+document.getElementById('prev').addEventListener('click', () => show(idx-1));
+document.getElementById('next').addEventListener('click', () => show(idx+1));
+
+const initial = parseInt((location.hash || '#1').slice(1)) - 1;
+if (!isNaN(initial) && initial >= 0 && initial < total) show(initial);
+</script>
+</body>
+</html>

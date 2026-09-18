@@ -1,0 +1,44 @@
+iso3,country,gdp_growth
+ARE,UAE,1.0
+BHS,Bahamas,1.1
+BOL,Bolivia (Plurinational State of),1.2
+BRN,Brunei,1.3
+CIV,Ivory Coast,1.4
+COD,DR Congo,1.5
+COG,Republic of the Congo,1.6
+CPV,Cape Verde,1.7
+CZE,Czech Republic,1.8
+DEU,Germny,1.9
+EGY,Egypt,2.0
+FRA,France,2.1
+FSM,Micronesia,2.2
+GBR,UK,2.3
+GMB,Gambia,2.4
+HKG,Hong Kong,2.5
+IRN,Iran,2.6
+KGZ,Kyrgyzstan,2.7
+KNA,Saint Kitts and Nevis,2.8
+KOR,South Korea,2.9
+LAO,Laos,3.0
+LCA,Saint Lucia,3.1
+MAC,Macau,3.2
+MDA,Republic of Moldova,3.3
+MKD,North Macedonia,3.4
+MMR,Burma,3.5
+NGA,Nigeria,3.6
+PHL,Phillipines,3.7
+PRK,North Korea,3.8
+PSE,Palestine,3.9
+RUS,Russia,4.0
+SVK,Slovakia,4.1
+SWZ,Swaziland,4.2
+SYR,Syria,4.3
+TLS,East Timor,4.4
+TTO,Trinidad & Tobago,4.5
+TUR,Turkey,4.6
+TZA,"Tanzania, United Rep.",4.7
+USA,USA,4.8
+VCT,Saint Vincent and the Grenadines,4.9
+VEN,Venezuela,5.0
+VNM,Viet Nam,5.1
+YEM,Yemen,5.2

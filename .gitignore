@@ -1,0 +1,6 @@
+local_data/
+*.parquet
+.venv/
+__pycache__/
+.DS_Store
+checkpoints/

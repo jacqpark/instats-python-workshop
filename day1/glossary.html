@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 1 glossary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;700;800&family=Chakra+Petch:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#0A0E27;--navy:#0F1B3D;--pink:#F0A6CA;--pink-hot:#E87CB2;--cyan:#5EDCF4;
+--yellow:#F4D03F;--lav:#E2D5F2;--white:#F8F4FF;
+--display:'Tektur','Courier New',monospace;--sans:'Chakra Petch','Helvetica Neue',Arial,sans-serif;
+--mono:'Space Mono','Courier New',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--lav);color:var(--navy);font:400 15px/1.5 var(--sans);
+background-image:linear-gradient(rgba(15,27,61,.07) 1px,transparent 1px),
+linear-gradient(90deg,rgba(15,27,61,.07) 1px,transparent 1px);background-size:14px 14px;
+-webkit-font-smoothing:antialiased;padding:34px 22px 50px}
+.sheet{max-width:940px;margin:0 auto}
+.tag{display:inline-block;font:700 11px var(--display);letter-spacing:.2em;text-transform:uppercase;
+background:var(--navy);color:var(--yellow);padding:7px 14px;margin-bottom:14px}
+h1{font:800 38px/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em;
+color:var(--navy);text-shadow:.045em .045em 0 var(--pink-hot);margin-bottom:6px}
+.sub{font:12px var(--mono);letter-spacing:.1em;color:rgba(15,27,61,.78);margin-bottom:26px}
+h2{font:800 17px var(--display);color:var(--navy);margin:26px 0 10px;
+border-bottom:2px dashed var(--navy);padding-bottom:7px}
+p{margin:0 0 9px;max-width:66em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;text-align:left;
+color:rgba(15,27,61,.64);padding:0 10px 6px 0}
+td{padding:5px 10px 5px 0;border-top:2px dashed rgba(15,27,61,.28);vertical-align:top}
+code,.m{font-family:var(--mono);font-size:.88em;background:rgba(15,27,61,.09);padding:1px 5px;font-weight:700}
+dl{margin:0}
+dt{font:700 13px var(--mono);color:var(--navy);margin-top:9px}
+dd{margin:1px 0 0;font-size:14px;color:rgba(15,27,61,.82)}
+ul{list-style:none}
+li{position:relative;padding-left:18px;margin-bottom:7px;font-size:14px}
+li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;background:var(--pink-hot)}
+.box{background:rgba(255,255,255,.55);border:2px solid var(--navy);
+box-shadow:5px 5px 0 var(--pink-hot);padding:14px 16px;margin-top:16px}
+.box h3{font:800 14px var(--display);margin-bottom:7px}
+.foot{margin-top:30px;border-top:2px dashed var(--navy);padding-top:9px;
+font:700 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(15,27,61,.6);
+display:flex;justify-content:space-between}
+@media print{body{background:#fff;padding:0}.sheet{max-width:none}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body><div class="sheet">
+<div class="tag">Day 1</div>
+<h1>Day 1 glossary</h1>
+<div class="sub">Python basics, pandas, and record linkage.</div>
+<div class="cols"><div><dl><dt>Cell</dt><dd>One block of code in a notebook. Run it with Shift and Enter.</dd><dt>Kernel</dt><dd>The Python process behind the notebook. It remembers everything you have run.</dd><dt>Runtime</dt><dd>The machine Colab gives you. Free CPU for Days 1 and 2, free T4 GPU for Day 3.</dd><dt>Variable</dt><dd>A name pointing at a value, made with <code>=</code>.</dd><dt>List</dt><dd>An ordered collection, written <code>[1, 2, 3]</code>. R's vector.</dd><dt>Dictionary</dt><dd>Key to value pairs, written <code>{'left': 0}</code>. Label maps live here.</dd><dt>Comprehension</dt><dd>Building a list in one line, <code>[f(i) for i in x]</code>. R's sapply.</dd><dt>Import</dt><dd>Loading a library once, near the top, for the whole session.</dd><dt>Indentation</dt><dd>Leading spaces that mark a block. In Python they are part of the grammar.</dd><dt>Traceback</dt><dd>The error report Python prints. The last line names the problem.</dd></dl></div><div><dl><dt>KeyError</dt><dd>You asked for a column or dictionary key that is not there. Check the spelling.</dd><dt>TypeError</dt><dd>You combined two incompatible types, such as text and a number.</dd><dt>DataFrame</dt><dd>A pandas table. R's data.frame.</dd><dt>Series</dt><dd>One column of a DataFrame.</dd><dt>value_counts</dt><dd>Counts of each distinct value in a column. R's table().</dd><dt>Record linkage</dt><dd>Joining two datasets that describe the same things under different names.</dd><dt>difflib</dt><dd>Python's built-in string similarity. Compares spelling, character by character.</dd><dt>Threshold</dt><dd>The similarity score above which you auto-accept a match. We use 0.8.</dd><dt>Crosswalk</dt><dd>A dictionary mapping one dataset's names onto another's.</dd><dt>Embedding</dt><dd>Numbers standing for meaning. Lets you match Burma to Myanmar.</dd><dt>Cosine similarity</dt><dd>How close two embeddings point in the same direction. 1 is identical.</dd></dl></div></div>
+<div class="foot"><span>Python Literacy for Text-as-Data</span><span>Day 1 of 3</span></div>
+</div></body>
+</html>
