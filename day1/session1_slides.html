@@ -305,6 +305,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
 <section class="slide slide-marker pink">
   <h1>Start</h1>
 </section>
+<!-- 1. TITLE -->
 <section class="slide slide-title navy">
   <div class="slide-title-inner">
     <div class="corner">Day 01 / 03 &middot; Session 1</div>
@@ -348,13 +349,13 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
 <!-- 3. WHERE WE ARE HEADED -->
 <section class="slide dark navy">
   <div class="eyebrow">The arc of the week</div>
-  <h2>By Friday you fine-tune<br>your own model.</h2>
+  <h2>By Wednesday you fine-tune<br>your own model.</h2>
   <div class="rule"></div>
   <p class="lede" style="max-width: 900px;">That goal is three days away. It rests entirely on the Python you write today. This is the on-ramp, so we spend the session on the language itself, on a tiny dataset where nothing else competes for attention.</p>
   <ul class="bare" style="margin-top: 24px;">
     <li><span class="highlight">Today.</span> The language. Lists, dictionaries, and a data.frame.</li>
     <li><span class="highlight">Tomorrow.</span> Turn text into features and topics, then meet the encoder.</li>
-    <li><span class="highlight">Friday.</span> Fine-tune a left-right classifier and ship it.</li>
+    <li><span class="highlight">Wednesday.</span> Fine-tune a left-right classifier and ship it.</li>
   </ul>
   <div class="slide-footer"><span>Session 1, The arc</span><span>03 / 11</span></div>
 </section>
@@ -533,6 +534,8 @@ function publishSync() {
   const payload = { day: SYNC_DAY, slide: num, t: Date.now() };
   if (syncChannel) syncChannel.postMessage(payload);
   try { localStorage.setItem(SYNC_KEY, JSON.stringify(payload)); } catch (_) {}
+  // cross-browser relay, served by start_workshop.command
+  if (location.hostname === '127.0.0.1') fetch('/sync', { method: 'POST', body: JSON.stringify(payload) }).catch(() => {});
 }
 if (syncChannel) {
   syncChannel.addEventListener('message', e => {

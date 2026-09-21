@@ -305,6 +305,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
 <section class="slide slide-marker pink">
   <h1>Start</h1>
 </section>
+<!-- 12. TITLE -->
 <section class="slide slide-title navy">
   <div class="slide-title-inner">
     <div class="corner">Day 01 / 03 &middot; Session 2</div>
@@ -320,6 +321,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
     </div>
   </div>
 </section>
+<!-- 13. THE CHORE -->
 <section class="slide lav">
   <div class="eyebrow">This session</div>
   <h2>Two datasets that<br>refuse to join.</h2>
@@ -335,6 +337,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   </div>
   <div class="slide-footer"><span>Session 2, The chore</span><span>02 / 10</span></div>
 </section>
+<!-- 14. DIFFLIB -->
 <section class="slide pink">
   <div class="eyebrow">Approach A</div>
   <h2>Character matching<br>with difflib.</h2>
@@ -351,6 +354,7 @@ difflib.<span class="fn">SequenceMatcher</span>(
   </div>
   <div class="slide-footer"><span>Session 2, difflib</span><span>03 / 10</span></div>
 </section>
+<!-- 15. DIFFLIB RESULT -->
 <section class="slide navy">
   <div class="eyebrow">Approach A, the result</div>
   <h2>Great on typos,<br>blind to meaning.</h2>
@@ -363,6 +367,7 @@ difflib.<span class="fn">SequenceMatcher</span>(
   <p class="small" style="margin-top: 20px;">No amount of tuning fixes an acronym, because the similarity is in the meaning.</p>
   <div class="slide-footer"><span>Session 2, difflib result</span><span>04 / 10</span></div>
 </section>
+<!-- 16. EMBEDDINGS -->
 <section class="slide lav">
   <div class="eyebrow">Approach B</div>
   <h2>Semantic matching<br>with embeddings.</h2>
@@ -379,6 +384,7 @@ sims = E_src @ E_off.T
   </div>
   <div class="slide-footer"><span>Session 2, embeddings</span><span>05 / 10</span></div>
 </section>
+<!-- 17. EMBEDDINGS RESULT -->
 <section class="slide pink">
   <div class="eyebrow">Approach B, the result</div>
   <h2>It reads meaning.</h2>
@@ -395,6 +401,7 @@ sims = E_src @ E_off.T
   <p class="small" style="margin-top: 18px;">On the acronym and rename bucket embeddings reach 0.71, against 0.14 for difflib. Overall 38 of 43.</p>
   <div class="slide-footer"><span>Session 2, embeddings result</span><span>06 / 10</span></div>
 </section>
+<!-- 18. VERDICT -->
 <section class="slide navy">
   <div class="eyebrow">Neither wins outright</div>
   <h2>Two tools, two strengths.</h2>
@@ -407,6 +414,7 @@ sims = E_src @ E_off.T
   <p class="lede" style="margin-top: 22px; font-size: 26px;">Good pipelines auto-accept the confident matches and route the rest to a human.</p>
   <div class="slide-footer"><span>Session 2, The verdict</span><span>07 / 10</span></div>
 </section>
+<!-- 19. HANDS-ON -->
 <section class="slide lav">
   <div class="eyebrow">Hands-on</div>
   <h2>Link the two files,<br>then grade yourself.</h2>
@@ -422,6 +430,7 @@ src[<span class="str">'semantic'</span>] = ...   <span class="com"># embeddings<
   </div>
   <div class="slide-footer"><span>Session 2, Hands-on</span><span>08 / 10</span></div>
 </section>
+<!-- 20. BRIDGE -->
 <section class="slide pink">
   <div class="eyebrow">The week in miniature</div>
   <h2>You just met the plot<br>of the whole workshop.</h2>
@@ -429,6 +438,7 @@ src[<span class="str">'semantic'</span>] = ...   <span class="com"># embeddings<
   <p class="lede" style="max-width: 900px;">Character methods against embedding methods, on the same task. The embedding somehow knew that Burma is Myanmar. How does a model turn a name into a vector of meaning?</p>
   <div class="slide-footer"><span>Session 2, The bridge</span><span>09 / 10</span></div>
 </section>
+<!-- 21. RECAP -->
 <section class="slide dark navy">
   <div class="eyebrow">Session 2 recap</div>
   <h2>You can link<br>messy data now.</h2>
@@ -475,6 +485,8 @@ function publishSync() {
   const payload = { day: SYNC_DAY, slide: num, t: Date.now() };
   if (syncChannel) syncChannel.postMessage(payload);
   try { localStorage.setItem(SYNC_KEY, JSON.stringify(payload)); } catch (_) {}
+  // cross-browser relay, served by start_workshop.command
+  if (location.hostname === '127.0.0.1') fetch('/sync', { method: 'POST', body: JSON.stringify(payload) }).catch(() => {});
 }
 if (syncChannel) {
   syncChannel.addEventListener('message', e => {

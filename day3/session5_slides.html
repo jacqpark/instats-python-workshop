@@ -305,6 +305,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
 <section class="slide slide-marker pink">
   <h1>Start</h1>
 </section>
+<!-- 1. TITLE -->
 <section class="slide slide-title navy">
   <div class="slide-title-inner">
     <div class="corner">Day 03 / 03 &middot; Session 5</div>
@@ -320,6 +321,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
     </div>
   </div>
 </section>
+<!-- 2. SWITCH TO GPU -->
 <section class="slide lav">
   <div class="eyebrow">First, the runtime</div>
   <h2>Switch to a GPU.</h2>
@@ -328,9 +330,10 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   <p class="small">If your runtime stalls, a precomputed model is provided so you are never stranded.</p>
   <div class="slide-footer"><span>Session 5, Setup</span><span>02 / 08</span></div>
 </section>
+<!-- 3. THE LOOP -->
 <section class="slide pink">
-  <div class="eyebrow">Training is not magic</div>
-  <h2>It is a loop.</h2>
+  <div class="eyebrow">Under the hood</div>
+  <h2>Training is a loop.</h2>
   <div class="rule"></div>
   <pre><span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(epochs):
     <span class="kw">for</span> batch <span class="kw">in</span> data:
@@ -341,6 +344,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   <p class="small" style="margin-top: 18px;">Predict, measure how wrong you are, nudge the weights to be a little less wrong. Repeat.</p>
   <div class="slide-footer"><span>Session 5, The loop</span><span>03 / 08</span></div>
 </section>
+<!-- 4. SETFIT -->
 <section class="slide navy">
   <div class="eyebrow">The tool</div>
   <h2>SetFit wraps the loop.</h2>
@@ -348,7 +352,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   <div class="two-col">
     <div class="col">
       <p>SetFit learns from very few labeled examples, which is the realistic case for hand-coded data. It trains in minutes on a free T4. This is the capstone everyone completes.</p>
-      <p class="small">Sixteen examples per class is enough to start.</p>
+      <p class="small">Sixty-four examples per class, from UK manifestos only, are enough here.</p>
     </div>
     <pre><span class="kw">from</span> setfit <span class="kw">import</span> SetFitModel, Trainer
 model = SetFitModel.<span class="fn">from_pretrained</span>(
@@ -358,20 +362,22 @@ trainer.<span class="fn">train</span>()</pre>
   </div>
   <div class="slide-footer"><span>Session 5, SetFit</span><span>04 / 08</span></div>
 </section>
+<!-- 5. FEW-SHOT SPLIT -->
 <section class="slide lav">
   <div class="eyebrow">Few-shot</div>
   <h2>A small train,<br>a real test.</h2>
   <div class="rule"></div>
   <div class="two-col">
-    <pre>train = df.<span class="fn">groupby</span>(<span class="str">'label'</span>).<span class="fn">sample</span>(<span class="str">16</span>)
+    <pre>train = df.<span class="fn">groupby</span>(<span class="str">'label'</span>).<span class="fn">sample</span>(<span class="str">64</span>)
 test  = df.<span class="fn">drop</span>(train.index) \
-          .<span class="fn">groupby</span>(<span class="str">'label'</span>).<span class="fn">sample</span>(<span class="str">150</span>)</pre>
+          .<span class="fn">groupby</span>(<span class="str">'label'</span>).<span class="fn">sample</span>(<span class="str">200</span>)</pre>
     <div class="col">
       <p>A balanced handful to learn from, and a larger held-out set to be judged on. Few labels in, an honest test kept aside.</p>
     </div>
   </div>
   <div class="slide-footer"><span>Session 5, The split</span><span>05 / 08</span></div>
 </section>
+<!-- 6. FIRST LOOK -->
 <section class="slide pink">
   <div class="eyebrow">First look</div>
   <h2>Sanity-check what<br>it learned.</h2>
@@ -387,6 +393,7 @@ test  = df.<span class="fn">drop</span>(train.index) \
   </div>
   <div class="slide-footer"><span>Session 5, Predictions</span><span>06 / 08</span></div>
 </section>
+<!-- 7. HANDS-ON -->
 <section class="slide navy">
   <div class="eyebrow">Hands-on</div>
   <h2>Train your model.</h2>
@@ -395,12 +402,13 @@ test  = df.<span class="fn">drop</span>(train.index) \
   <p class="small">Everyone finishes this. The stretch and the polish come next.</p>
   <div class="slide-footer"><span>Session 5, Hands-on</span><span>07 / 08</span></div>
 </section>
+<!-- 8. RECAP -->
 <section class="slide dark navy">
   <div class="eyebrow">Session 5 recap</div>
   <h2>You trained a model.</h2>
   <div class="rule"></div>
   <ul class="bare">
-    <li>You saw the training loop, ten honest lines.</li>
+    <li>You saw the training loop in a handful of lines.</li>
     <li>You fine-tuned an encoder with SetFit, from a small labeled set.</li>
     <li>You sanity-checked its first predictions.</li>
   </ul>
@@ -441,6 +449,8 @@ function publishSync() {
   const payload = { day: SYNC_DAY, slide: num, t: Date.now() };
   if (syncChannel) syncChannel.postMessage(payload);
   try { localStorage.setItem(SYNC_KEY, JSON.stringify(payload)); } catch (_) {}
+  // cross-browser relay, served by start_workshop.command
+  if (location.hostname === '127.0.0.1') fetch('/sync', { method: 'POST', body: JSON.stringify(payload) }).catch(() => {});
 }
 if (syncChannel) {
   syncChannel.addEventListener('message', e => {

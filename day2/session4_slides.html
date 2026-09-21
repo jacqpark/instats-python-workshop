@@ -305,6 +305,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
 <section class="slide slide-marker pink">
   <h1>Start</h1>
 </section>
+<!-- 11. TITLE -->
 <section class="slide slide-title navy">
   <div class="slide-title-inner">
     <div class="corner">Day 02 / 03 &middot; Session 4</div>
@@ -320,6 +321,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
     </div>
   </div>
 </section>
+<!-- 12. CONTEXT -->
 <section class="slide lav">
   <div class="eyebrow">Why context matters</div>
   <h2>The same word,<br>two meanings.</h2>
@@ -336,6 +338,7 @@ central <span class="highlight">bank</span> &rarr; a different vector
   </div>
   <div class="slide-footer"><span>Session 4, Context</span><span>02 / 10</span></div>
 </section>
+<!-- 13. BERT MODEL -->
 <section class="slide pink">
   <div class="eyebrow">What a BERT model is</div>
   <h2>A bidirectional encoder.</h2>
@@ -348,6 +351,7 @@ central <span class="highlight">bank</span> &rarr; a different vector
   </ul>
   <div class="slide-footer"><span>Session 4, The model</span><span>03 / 10</span></div>
 </section>
+<!-- 14. TOKENIZER -->
 <section class="slide navy">
   <div class="eyebrow">Tokenization</div>
   <h2>Text becomes input_ids.</h2>
@@ -365,6 +369,7 @@ tokens: [<span class="str">'[CLS]'</span>, <span class="str">'expand'</span>,
   </div>
   <div class="slide-footer"><span>Session 4, Tokenizer</span><span>04 / 10</span></div>
 </section>
+<!-- 15. PADDING AND 512 -->
 <section class="slide lav">
   <div class="eyebrow">Padding, truncation, the wall</div>
   <h2>Batches are rectangles.</h2>
@@ -381,6 +386,7 @@ tokens: [<span class="str">'[CLS]'</span>, <span class="str">'expand'</span>,
   </div>
   <div class="slide-footer"><span>Session 4, The 512 wall</span><span>05 / 10</span></div>
 </section>
+<!-- 16. DATASET -->
 <section class="slide pink">
   <div class="eyebrow">Assemble the inputs</div>
   <h2>A Dataset, tokenized.</h2>
@@ -396,6 +402,7 @@ ds = ds.<span class="fn">train_test_split</span>(test_size=<span class="str">0.2
   </div>
   <div class="slide-footer"><span>Session 4, Dataset</span><span>06 / 10</span></div>
 </section>
+<!-- 17. FORWARD PASS -->
 <section class="slide navy">
   <div class="eyebrow">The model with a head</div>
   <h2>One forward pass.</h2>
@@ -412,6 +419,7 @@ probs.<span class="fn">argmax</span>(-<span class="str">1</span>)</pre>
   </div>
   <div class="slide-footer"><span>Session 4, Forward pass</span><span>07 / 10</span></div>
 </section>
+<!-- 18. HANDS-ON -->
 <section class="slide lav">
   <div class="eyebrow">Hands-on</div>
   <h2>Build every input,<br>stop before training.</h2>
@@ -420,6 +428,7 @@ probs.<span class="fn">argmax</span>(-<span class="str">1</span>)</pre>
   <p class="small">Fix the seed. Two runs of the same cell should give identical shapes and labels.</p>
   <div class="slide-footer"><span>Session 4, Hands-on</span><span>08 / 10</span></div>
 </section>
+<!-- 19. BRIDGE -->
 <section class="slide pink">
   <div class="eyebrow">Where we are</div>
   <h2>Every ingredient<br>is on the table.</h2>
@@ -427,6 +436,7 @@ probs.<span class="fn">argmax</span>(-<span class="str">1</span>)</pre>
   <p class="lede" style="max-width: 900px;">A tokenized Dataset, a train-test split, and a model with a head. Tomorrow you train that head and prove it beats the baseline you built today.</p>
   <div class="slide-footer"><span>Session 4, The bridge</span><span>09 / 10</span></div>
 </section>
+<!-- 20. RECAP -->
 <section class="slide dark navy">
   <div class="eyebrow">Session 4 recap</div>
   <h2>You opened the encoder.</h2>
@@ -473,6 +483,8 @@ function publishSync() {
   const payload = { day: SYNC_DAY, slide: num, t: Date.now() };
   if (syncChannel) syncChannel.postMessage(payload);
   try { localStorage.setItem(SYNC_KEY, JSON.stringify(payload)); } catch (_) {}
+  // cross-browser relay, served by start_workshop.command
+  if (location.hostname === '127.0.0.1') fetch('/sync', { method: 'POST', body: JSON.stringify(payload) }).catch(() => {});
 }
 if (syncChannel) {
   syncChannel.addEventListener('message', e => {

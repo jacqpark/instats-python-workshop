@@ -305,6 +305,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
 <section class="slide slide-marker pink">
   <h1>Start</h1>
 </section>
+<!-- 1. TITLE -->
 <section class="slide slide-title navy">
   <div class="slide-title-inner">
     <div class="corner">Day 02 / 03 &middot; Session 3</div>
@@ -320,6 +321,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
     </div>
   </div>
 </section>
+<!-- 2. ROADMAP -->
 <section class="slide lav">
   <div class="eyebrow">This session</div>
   <h2>Words, then features,<br>then topics.</h2>
@@ -331,6 +333,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   </div>
   <div class="slide-footer"><span>Session 3, Roadmap</span><span>02 / 10</span></div>
 </section>
+<!-- 3. DOCUMENT-TERM MATRIX -->
 <section class="slide pink">
   <div class="eyebrow">Part 01, from text to features</div>
   <h2>A document-term matrix.</h2>
@@ -342,11 +345,12 @@ X = <span class="fn">CountVectorizer</span>(
 <span class="com"># rows are sentences, columns are words</span></pre>
     <div class="col">
       <p>Counting which words appear in which sentence turns text into a table a model can read. TF-IDF downweights common words.</p>
-      <p class="small">Keep that TF-IDF. It is the baseline your Friday fine-tune has to beat.</p>
+      <p class="small">Keep that TF-IDF. It is the baseline your Wednesday fine-tune has to beat.</p>
     </div>
   </div>
   <div class="slide-footer"><span>Session 3, Features</span><span>03 / 10</span></div>
 </section>
+<!-- 4. LDA -->
 <section class="slide navy">
   <div class="eyebrow">Part 02, LDA</div>
   <h2>Topics are groups of<br>words that travel together.</h2>
@@ -357,26 +361,28 @@ X = <span class="fn">CountVectorizer</span>(
       <p class="small">On the manifesto corpus the topics are recognizable policy areas.</p>
     </div>
     <ul class="bare">
-      <li><span class="highlight">Education.</span> schools students teachers funding</li>
-      <li><span class="highlight">Health.</span> care hospital patients services</li>
-      <li><span class="highlight">Tax.</span> tax income rate budget spending</li>
-      <li><span class="highlight">Crime.</span> police prison offenders justice</li>
+      <li><span class="highlight">Health.</span> health services care mental funding</li>
+      <li><span class="highlight">Tax.</span> tax businesses small taxes</li>
+      <li><span class="highlight">Defence.</span> defence security industry cyber</li>
+      <li><span class="highlight">Crime.</span> rights crime law police</li>
     </ul>
   </div>
   <div class="slide-footer"><span>Session 3, LDA</span><span>04 / 10</span></div>
 </section>
+<!-- 5. TOPICS AND IDEOLOGY -->
 <section class="slide lav">
   <div class="eyebrow">Part 02, a caution</div>
-  <h2>A topic is a policy area,<br>not a left-right score.</h2>
+  <h2>Topics are policy areas,<br>and only some of them lean.</h2>
   <div class="rule"></div>
   <div class="bars">
-    <div class="bar-row"><span class="name">Education topic</span><span class="track"><span class="fill" style="width:93%"></span></span><span class="val">93% left</span></div>
-    <div class="bar-row"><span class="name">Crime topic</span><span class="track"><span class="fill warm" style="width:84%"></span></span><span class="val">84% right</span></div>
+    <div class="bar-row"><span class="name">Health topic</span><span class="track"><span class="fill" style="width:88%"></span></span><span class="val">88% left</span></div>
+    <div class="bar-row"><span class="name">Defence topic</span><span class="track"><span class="fill warm" style="width:71%"></span></span><span class="val">71% right</span></div>
   </div>
   <p style="margin-top: 22px;">Some topics lean, because some issues are owned by one side. Many stay mixed. LDA finds what parties talk about. Where they stand is a separate question.</p>
-  <p class="small">That gap is exactly why Friday trains a model on the labels directly.</p>
+  <p class="small">That gap is exactly why Wednesday trains a model on the labels directly.</p>
   <div class="slide-footer"><span>Session 3, Topics and ideology</span><span>05 / 10</span></div>
 </section>
+<!-- 6. STM -->
 <section class="slide pink">
   <div class="eyebrow">Part 03, meeting STM</div>
   <h2>The Structural Topic Model<br>adds a covariate.</h2>
@@ -393,17 +399,19 @@ fit = <span class="fn">stm</span>(docs, vocab, K=<span class="str">10</span>,
   </div>
   <div class="slide-footer"><span>Session 3, STM</span><span>06 / 10</span></div>
 </section>
+<!-- 7. STM RESULT -->
 <section class="slide navy">
   <div class="eyebrow">Part 03, the STM result</div>
   <h2>Which topics does<br>each side emphasize?</h2>
   <div class="rule"></div>
   <div class="two-col">
-    <div class="card cool"><div class="label">The left emphasizes</div><p><span class="highlight">Health.</span> hospitals, care, services</p><p><span class="highlight">Education.</span> schools, teachers</p><p><span class="highlight">Labour.</span> workers, unions</p></div>
-    <div class="card warm"><div class="label">The right emphasizes</div><p><span class="highlight">Crime.</span> police, prison, sentencing</p><p><span class="highlight">Defence.</span> military, security</p><p><span class="highlight">Fiscal.</span> tax, debt, spending</p></div>
+    <div class="card cool"><div class="label">The left emphasizes</div><p><span class="highlight">Health.</span> health, mental health, services</p><p><span class="highlight">Labour.</span> workers, wages, employment</p></div>
+    <div class="card warm"><div class="label">The right emphasizes</div><p><span class="highlight">Defence and crime.</span> defence, industry, crime</p><p><span class="highlight">Budget.</span> budget, billions, investment</p></div>
   </div>
   <p class="small" style="margin-top: 18px;">This is the canonical STM finding, and a clean contrast to LDA, which never saw the covariate.</p>
   <div class="slide-footer"><span>Session 3, STM result</span><span>07 / 10</span></div>
 </section>
+<!-- 8. HANDS-ON -->
 <section class="slide lav">
   <div class="eyebrow">Hands-on</div>
   <h2>Fit LDA, read the topics,<br>then run STM.</h2>
@@ -412,6 +420,7 @@ fit = <span class="fn">stm</span>(docs, vocab, K=<span class="str">10</span>,
   <p class="small">The R packages install once at the start of the session, so they are ready when you get here.</p>
   <div class="slide-footer"><span>Session 3, Hands-on</span><span>08 / 10</span></div>
 </section>
+<!-- 9. BRIDGE -->
 <section class="slide pink">
   <div class="eyebrow">Why this matters</div>
   <h2>A bag of words<br>throws away order.</h2>
@@ -419,6 +428,7 @@ fit = <span class="fn">stm</span>(docs, vocab, K=<span class="str">10</span>,
   <p class="lede" style="max-width: 900px;">LDA and TF-IDF count words and ignore the order they came in. <code>aid raises trade</code> and <code>trade raises aid</code> look almost the same to them. The next session fixes that.</p>
   <div class="slide-footer"><span>Session 3, The bridge</span><span>09 / 10</span></div>
 </section>
+<!-- 10. RECAP -->
 <section class="slide dark navy">
   <div class="eyebrow">Session 3 recap</div>
   <h2>You found the topics.</h2>
@@ -465,6 +475,8 @@ function publishSync() {
   const payload = { day: SYNC_DAY, slide: num, t: Date.now() };
   if (syncChannel) syncChannel.postMessage(payload);
   try { localStorage.setItem(SYNC_KEY, JSON.stringify(payload)); } catch (_) {}
+  // cross-browser relay, served by start_workshop.command
+  if (location.hostname === '127.0.0.1') fetch('/sync', { method: 'POST', body: JSON.stringify(payload) }).catch(() => {});
 }
 if (syncChannel) {
   syncChannel.addEventListener('message', e => {
