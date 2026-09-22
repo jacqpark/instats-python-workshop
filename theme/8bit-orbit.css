@@ -180,6 +180,7 @@ pre .com { color: rgba(226,213,242,.45); }
 pre .str { color: var(--yellow); }
 pre .fn  { color: var(--cyan); }
 pre .kw  { color: var(--pink-hot); }
+pre .highlight { color: var(--yellow); }
 
 /* --------------------------------------------------------------- tables */
 table { width: 100%; border-collapse: collapse; font-size: .9em; }
