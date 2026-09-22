@@ -349,12 +349,13 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   <div class="rule"></div>
   <div class="two-col">
     <div class="col">
-      <p>Apply the model to every sentence, then aggregate to a left-right score per party and per year. You reconstruct a scaling measure from raw text, at a scale hand-coding cannot reach.</p>
-      <p class="small">Party and year come from the Manifesto pull.</p>
+      <p>Apply the model to every sentence, then aggregate to a left-right score per party and per year, at a scale hand-coding cannot reach.</p>
+      <p class="small">Then set the hand codes beside it. A decent sentence-level kappa does not guarantee that the parties come out in the right order.</p>
     </div>
     <pre>df[<span class="str">'is_right'</span>] = model.<span class="fn">predict</span>(df.text) == <span class="str">'right'</span>
-df.<span class="fn">groupby</span>([<span class="str">'party'</span>, <span class="str">'year'</span>]) \
-  [<span class="str">'is_right'</span>].<span class="fn">mean</span>()</pre>
+df[<span class="str">'coded_right'</span>] = df.label == <span class="str">'right'</span>
+df.<span class="fn">groupby</span>([<span class="str">'partyname'</span>, <span class="str">'year'</span>]) \
+  [[<span class="str">'is_right'</span>, <span class="str">'coded_right'</span>]].<span class="fn">mean</span>()</pre>
   </div>
   <div class="slide-footer"><span>Session 6, At scale</span><span>04 / 09</span></div>
 </section>
