@@ -329,7 +329,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   <div class="three-col">
     <div class="card"><div class="label">Part 01</div><h3>Pull and features</h3><p>Pull the corpus with your key, collapse to left and right, and build a document-term matrix.</p></div>
     <div class="card"><div class="label">Part 02</div><h3>LDA topics</h3><p>Find the policy areas parties talk about, in seconds on the CPU.</p></div>
-    <div class="card"><div class="label">Part 03</div><h3>Meeting STM</h3><p>Let a covariate like left versus right shape which topics get emphasized.</p></div>
+    <div class="card"><div class="label">Part 03</div><h3>Meeting STM</h3><p>Let a covariate like the election year shape which topics get emphasized.</p></div>
   </div>
   <div class="slide-footer"><span>Session 3, Roadmap</span><span>02 / 10</span></div>
 </section>
@@ -375,10 +375,11 @@ X = <span class="fn">CountVectorizer</span>(
   <h2>Topics are policy areas,<br>and only some of them lean.</h2>
   <div class="rule"></div>
   <div class="bars">
-    <div class="bar-row"><span class="name">Health topic</span><span class="track"><span class="fill" style="width:88%"></span></span><span class="val">88% left</span></div>
-    <div class="bar-row"><span class="name">Defence topic</span><span class="track"><span class="fill warm" style="width:71%"></span></span><span class="val">71% right</span></div>
+    <div class="bar-row"><span class="name">All sentences</span><span class="track"><span class="fill" style="width:60%"></span></span><span class="val">60% left</span></div>
+    <div class="bar-row"><span class="name">Health topic</span><span class="track"><span class="fill" style="width:89%"></span></span><span class="val">89% left</span></div>
+    <div class="bar-row"><span class="name">Defence topic</span><span class="track"><span class="fill warm" style="width:60%"></span></span><span class="val">60% right</span></div>
   </div>
-  <p style="margin-top: 22px;">Some topics lean, because some issues are owned by one side. Many stay mixed. LDA finds what parties talk about. Where they stand is a separate question.</p>
+  <p style="margin-top: 22px;">Read each topic against the 60% baseline. Some lean because one side owns the issue, and others sit near it because both sides write about the same things. LDA finds what parties talk about. Where they stand is a separate question.</p>
   <p class="small">That gap is exactly why Wednesday trains a model on the labels directly.</p>
   <div class="slide-footer"><span>Session 3, Topics and ideology</span><span>05 / 10</span></div>
 </section>
@@ -389,26 +390,26 @@ X = <span class="fn">CountVectorizer</span>(
   <div class="rule"></div>
   <div class="two-col">
     <div class="col">
-      <p>LDA ignores who wrote a sentence. STM lets a covariate shape topic prevalence. Here the covariate is left versus right. In your own work it is party or year.</p>
+      <p>LDA ignores who wrote a sentence and when. STM lets a covariate shape topic prevalence. Here the covariate is the election year. Party works the same way.</p>
       <p class="small">We run the genuine R <code>stm</code> from Python through rpy2, which leans on the R you already know. A pure-Python cousin is tomotopy's DMR.</p>
     </div>
     <pre><span class="com"># R stm, called from Python</span>
 fit = <span class="fn">stm</span>(docs, vocab, K=<span class="str">10</span>,
-    prevalence=~rile, data=meta)
-<span class="fn">estimateEffect</span>(<span class="str">1</span>:<span class="str">10</span> ~ rile, fit)</pre>
+    prevalence=~<span class="fn">s</span>(year), data=meta)
+<span class="fn">estimateEffect</span>(<span class="str">1</span>:<span class="str">10</span> ~ <span class="fn">s</span>(year), fit)</pre>
   </div>
   <div class="slide-footer"><span>Session 3, STM</span><span>06 / 10</span></div>
 </section>
 <!-- 7. STM RESULT -->
 <section class="slide navy">
-  <div class="eyebrow">Part 03, the STM result</div>
-  <h2>Which topics does<br>each side emphasize?</h2>
+  <div class="eyebrow">Part 03, reading the STM result</div>
+  <h2>Read STM through<br>the fitted curve.</h2>
   <div class="rule"></div>
   <div class="two-col">
-    <div class="card cool"><div class="label">The left emphasizes</div><p><span class="highlight">Health.</span> health, mental health, services</p><p><span class="highlight">Labour.</span> workers, wages, employment</p></div>
-    <div class="card warm"><div class="label">The right emphasizes</div><p><span class="highlight">Defence and crime.</span> defence, industry, crime</p><p><span class="highlight">Budget.</span> budget, billions, investment</p></div>
+    <div class="card cool"><div class="label">The table</div><p><span class="highlight">One ingredient per row.</span> Each <code>s(year)</code> row is one piece of a smooth curve. The rows only mean something added together.</p></div>
+    <div class="card warm"><div class="label">The curve</div><p><span class="highlight">Plot it.</span> <code>plot(eff, "year")</code> shows how each topic's share moves across election years.</p></div>
   </div>
-  <p class="small" style="margin-top: 18px;">This is the canonical STM finding, and a clean contrast to LDA, which never saw the covariate.</p>
+  <p class="small" style="margin-top: 18px;">Each country gives only its two latest elections, so year partly stands in for country. Why a topic moves is a question for the research design.</p>
   <div class="slide-footer"><span>Session 3, STM result</span><span>07 / 10</span></div>
 </section>
 <!-- 8. HANDS-ON -->
@@ -416,7 +417,7 @@ fit = <span class="fn">stm</span>(docs, vocab, K=<span class="str">10</span>,
   <div class="eyebrow">Hands-on</div>
   <h2>Fit LDA, read the topics,<br>then run STM.</h2>
   <div class="rule"></div>
-  <p>Your turn in the notebook. Build the matrix, fit LDA, name a few topics, then fit STM with the left-right covariate and read which topics lean which way.</p>
+  <p>Your turn in the notebook. Build the matrix, fit LDA, name a few topics, then fit STM with the election year and plot how each topic's share moves.</p>
   <p class="small">The R packages install once at the start of the session, so they are ready when you get here.</p>
   <div class="slide-footer"><span>Session 3, Hands-on</span><span>08 / 10</span></div>
 </section>
@@ -436,7 +437,7 @@ fit = <span class="fn">stm</span>(docs, vocab, K=<span class="str">10</span>,
   <ul class="bare">
     <li>You built a document-term matrix and kept a TF-IDF baseline.</li>
     <li>You fit LDA and named the policy areas it found.</li>
-    <li>You used STM to see how topics split left and right.</li>
+    <li>You used STM to see how topic shares move with the election year.</li>
   </ul>
   <p class="lede" style="margin-top: 24px; font-size: 26px;">Next session opens the encoder that reads word order and context.</p>
   <div class="slide-footer"><span>Session 3, Recap</span><span>10 / 10</span></div>
