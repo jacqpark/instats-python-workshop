@@ -305,7 +305,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
 <section class="slide slide-marker pink">
   <h1>Start</h1>
 </section>
-<!-- 9. TITLE -->
+<!-- 11. TITLE -->
 <section class="slide slide-title navy">
   <div class="slide-title-inner">
     <div class="corner">Day 03 / 03 &middot; Session 6</div>
@@ -321,7 +321,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
     </div>
   </div>
 </section>
-<!-- 10. DID IT HELP -->
+<!-- 12. DID IT HELP -->
 <section class="slide lav">
   <div class="eyebrow">Did it help</div>
   <h2>Against the baseline<br>you built yourself.</h2>
@@ -333,7 +333,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   <p style="margin-top: 22px;">On real manifesto text the fine-tune clearly beats the bag of words. That gap is the whole reason to fine-tune. Score with Cohen's kappa and macro F1 on the held-out set.</p>
   <div class="slide-footer"><span>Session 6, Evaluation</span><span>02 / 09</span></div>
 </section>
-<!-- 11. BASELINE ENOUGH -->
+<!-- 13. BASELINE ENOUGH -->
 <section class="slide pink">
   <div class="eyebrow">Be honest</div>
   <h2>Sometimes the baseline<br>is enough.</h2>
@@ -342,7 +342,7 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
   <p class="small">Read the confusion matrix too. It tells you which side the model confuses, which a single number hides.</p>
   <div class="slide-footer"><span>Session 6, The honest caveat</span><span>03 / 09</span></div>
 </section>
-<!-- 12. WHOLE CORPUS -->
+<!-- 14. WHOLE CORPUS -->
 <section class="slide navy">
   <div class="eyebrow">The payoff</div>
   <h2>Run it over<br>a whole corpus.</h2>
@@ -359,7 +359,7 @@ df.<span class="fn">groupby</span>([<span class="str">'partyname'</span>, <span 
   </div>
   <div class="slide-footer"><span>Session 6, At scale</span><span>04 / 09</span></div>
 </section>
-<!-- 13. SHIP IT -->
+<!-- 15. SHIP IT -->
 <section class="slide lav">
   <div class="eyebrow">Ship it</div>
   <h2>Save, reload, share.</h2>
@@ -370,12 +370,13 @@ reloaded = SetFitModel.<span class="fn">from_pretrained</span>(
     <span class="str">'left_right'</span>)
 model.<span class="fn">push_to_hub</span>(<span class="str">'you/manifesto-lr'</span>)</pre>
     <div class="col">
-      <p>Save the model, reload it to prove the save worked, then push it to the Hub so others can use it. The push uses a token stored in secrets, like your Manifesto key.</p>
+      <p>Save the model, reload it to prove the save worked, then push it to the Hub so others can use it. Your model gets an address of its own, and anyone can then call <code>from_pretrained</code> on it.</p>
+      <p class="small">This is where the <code>HF_TOKEN</code> from the start of the morning is finally used. Write access is the reason it needed the Write type.</p>
     </div>
   </div>
   <div class="slide-footer"><span>Session 6, Ship</span><span>05 / 09</span></div>
 </section>
-<!-- 14. MODEL CARD -->
+<!-- 16. MODEL CARD -->
 <section class="slide pink">
   <div class="eyebrow">Reproducible by default</div>
   <h2>Write a model card.</h2>
@@ -388,7 +389,7 @@ model.<span class="fn">push_to_hub</span>(<span class="str">'you/manifesto-lr'</
   </ul>
   <div class="slide-footer"><span>Session 6, Model card</span><span>06 / 09</span></div>
 </section>
-<!-- 15. LORA STRETCH -->
+<!-- 17. LORA STRETCH -->
 <section class="slide navy">
   <div class="eyebrow">The stretch</div>
   <h2>The Trainer and a<br>LoRA adapter.</h2>
@@ -401,7 +402,7 @@ model.<span class="fn">push_to_hub</span>(<span class="str">'you/manifesto-lr'</
   </div>
   <div class="slide-footer"><span>Session 6, LoRA stretch</span><span>07 / 09</span></div>
 </section>
-<!-- 16. GENERATIVE COUSIN -->
+<!-- 18. GENERATIVE COUSIN -->
 <section class="slide lav">
   <div class="eyebrow">Where next</div>
   <h2>The generative cousin.</h2>
@@ -409,7 +410,7 @@ model.<span class="fn">push_to_hub</span>(<span class="str">'you/manifesto-lr'</
   <p class="lede" style="max-width: 900px;">You fine-tuned an encoder to classify. The same LoRA idea fine-tunes a generative model to write or follow instructions, on the same free GPU. The pipeline you learned this week is the on-ramp to that.</p>
   <div class="slide-footer"><span>Session 6, The horizon</span><span>08 / 09</span></div>
 </section>
-<!-- 17. CLOSE -->
+<!-- 19. CLOSE -->
 <section class="slide dark navy">
   <div class="eyebrow">The week</div>
   <h2>From your first line<br>to a shipped model.</h2>

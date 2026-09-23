@@ -164,6 +164,8 @@ h3 { font-size: 1.05em; font-weight: 700; color: var(--strong); margin-bottom: .
 }
 .card p:last-child { margin-bottom: 0; }
 
+ol { padding-left: 1.4em; }
+ol li { margin-bottom: .4em; font-size: 1.02em; }
 ul.bare { list-style: none; }
 ul.bare li { position: relative; padding-left: 1.2em; margin-bottom: .45em; font-size: 1.05em; }
 ul.bare li::before {
@@ -321,16 +323,58 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
     </div>
   </div>
 </section>
-<!-- 2. SWITCH TO GPU -->
+<!-- 2. WHAT IS HUGGING FACE -->
 <section class="slide lav">
-  <div class="eyebrow">First, the runtime</div>
+  <div class="eyebrow">Where the models live</div>
+  <h2>Hugging Face.</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div class="col">
+      <p>A company, a website, and a set of Python libraries. The website, called the Hub, is a public archive of pretrained models and datasets, the way CRAN is an archive of R packages.</p>
+      <p class="small">Every model has an address, <code>owner/model-name</code>. <code>from_pretrained</code> takes that address, downloads the weights once, and caches them. You have been using the Hub since Monday.</p>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="label">The libraries you have met</div>
+        <p><code>sentence-transformers</code>, Monday's embeddings. <code>transformers</code>, yesterday's encoder. <code>datasets</code>, the table format they take. <code>setfit</code>, today's trainer.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Session 5, The Hub</span><span>02 / 10</span></div>
+</section>
+<!-- 3. YOUR HF TOKEN -->
+<section class="slide pink">
+  <div class="eyebrow">Ten minutes of setup</div>
+  <h2>Get your access token.</h2>
+  <div class="rule"></div>
+  <div class="two-col">
+    <div class="col">
+      <p>Reading a public model needs nothing. Writing one back to the Hub, and reading a gated model, needs a token that says who you are.</p>
+      <ol>
+        <li>Sign up free at <code>huggingface.co</code>.</li>
+        <li>Settings, then Access Tokens, then Create new token.</li>
+        <li>Type Write. Name it <code>instats</code>. Copy it once.</li>
+        <li>Colab key icon, name <code>HF_TOKEN</code>, notebook access on.</li>
+      </ol>
+    </div>
+    <div class="col">
+      <pre><span class="kw">from</span> google.colab <span class="kw">import</span> userdata
+token = userdata.<span class="fn">get</span>(<span class="str">'HF_TOKEN'</span>)</pre>
+      <p class="small">Same handling as your Manifesto key. A token pasted into a cell travels with the notebook to everyone you share it with.</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Session 5, Your token</span><span>03 / 10</span></div>
+</section>
+<!-- 4. SWITCH TO GPU -->
+<section class="slide lav">
+  <div class="eyebrow">Then, the runtime</div>
   <h2>Switch to a GPU.</h2>
   <div class="rule"></div>
   <p>Runtime, then Change runtime type, then T4 GPU. Training touches many numbers at once, which is what a GPU is built for. Everything before today ran on the CPU, and this is where the GPU earns its place.</p>
   <p class="small">If your runtime stalls, a precomputed model is provided so you are never stranded.</p>
-  <div class="slide-footer"><span>Session 5, Setup</span><span>02 / 08</span></div>
+  <div class="slide-footer"><span>Session 5, Setup</span><span>04 / 10</span></div>
 </section>
-<!-- 3. THE LOOP -->
+<!-- 5. THE LOOP -->
 <section class="slide pink">
   <div class="eyebrow">Under the hood</div>
   <h2>Training is a loop.</h2>
@@ -342,17 +386,18 @@ td.decoder { color: var(--muted); text-decoration: line-through; }
         loss.<span class="fn">backward</span>()        <span class="com"># which way to nudge each weight</span>
         optimizer.<span class="fn">step</span>()       <span class="com"># take the nudge</span></pre>
   <p class="small" style="margin-top: 18px;">Predict, measure how wrong you are, nudge the weights to be a little less wrong. Repeat.</p>
-  <div class="slide-footer"><span>Session 5, The loop</span><span>03 / 08</span></div>
+  <div class="slide-footer"><span>Session 5, The loop</span><span>05 / 10</span></div>
 </section>
-<!-- 4. SETFIT -->
+<!-- 6. SETFIT -->
 <section class="slide navy">
   <div class="eyebrow">The tool</div>
   <h2>SetFit wraps the loop.</h2>
   <div class="rule"></div>
   <div class="two-col">
     <div class="col">
-      <p>SetFit learns from very few labeled examples, which is the realistic case for hand-coded data. It trains in minutes on a free T4. This is the capstone everyone completes.</p>
-      <p class="small">Sixty-four examples per class, from UK manifestos only, are enough here.</p>
+      <p>A small open-source library, built for the case where hand-coded examples number in the dozens. It runs the loop for you in two stages.</p>
+      <p class="small"><strong>Stage one.</strong> Take an embedding model from the Hub and show it pairs of your labeled sentences, pulling same-label pairs together and pushing different-label pairs apart.</p>
+      <p class="small"><strong>Stage two.</strong> Fit a plain logistic regression on top of those sharpened embeddings. Sixty-four sentences per side make 8,320 pairs, which is why so few labels go so far.</p>
     </div>
     <pre><span class="kw">from</span> setfit <span class="kw">import</span> SetFitModel, Trainer
 model = SetFitModel.<span class="fn">from_pretrained</span>(
@@ -360,9 +405,9 @@ model = SetFitModel.<span class="fn">from_pretrained</span>(
 trainer = <span class="fn">Trainer</span>(model, train_dataset=ds)
 trainer.<span class="fn">train</span>()</pre>
   </div>
-  <div class="slide-footer"><span>Session 5, SetFit</span><span>04 / 08</span></div>
+  <div class="slide-footer"><span>Session 5, SetFit</span><span>06 / 10</span></div>
 </section>
-<!-- 5. FEW-SHOT SPLIT -->
+<!-- 7. FEW-SHOT SPLIT -->
 <section class="slide lav">
   <div class="eyebrow">Few-shot</div>
   <h2>A small train,<br>a real test.</h2>
@@ -375,9 +420,9 @@ test  = df.<span class="fn">drop</span>(train.index) \
       <p>A balanced handful to learn from, and a larger held-out set to be judged on. Few labels in, an honest test kept aside.</p>
     </div>
   </div>
-  <div class="slide-footer"><span>Session 5, The split</span><span>05 / 08</span></div>
+  <div class="slide-footer"><span>Session 5, The split</span><span>07 / 10</span></div>
 </section>
-<!-- 6. FIRST LOOK -->
+<!-- 8. FIRST LOOK -->
 <section class="slide pink">
   <div class="eyebrow">First look</div>
   <h2>Sanity-check what<br>it learned.</h2>
@@ -391,18 +436,18 @@ test  = df.<span class="fn">drop</span>(train.index) \
   <span class="str">'Cut taxes and regulation.'</span>])
 <span class="com"># ['left', 'right']</span></pre>
   </div>
-  <div class="slide-footer"><span>Session 5, Predictions</span><span>06 / 08</span></div>
+  <div class="slide-footer"><span>Session 5, Predictions</span><span>08 / 10</span></div>
 </section>
-<!-- 7. HANDS-ON -->
+<!-- 9. HANDS-ON -->
 <section class="slide navy">
   <div class="eyebrow">Hands-on</div>
   <h2>Train your model.</h2>
   <div class="rule"></div>
   <p>Your turn, and the heart of the week. Make the few-shot split, train with SetFit, and run your first predictions. In a few minutes you have a classifier you built yourself.</p>
   <p class="small">Everyone finishes this. The stretch and the polish come next.</p>
-  <div class="slide-footer"><span>Session 5, Hands-on</span><span>07 / 08</span></div>
+  <div class="slide-footer"><span>Session 5, Hands-on</span><span>09 / 10</span></div>
 </section>
-<!-- 8. RECAP -->
+<!-- 10. RECAP -->
 <section class="slide dark navy">
   <div class="eyebrow">Session 5 recap</div>
   <h2>You trained a model.</h2>
@@ -413,7 +458,7 @@ test  = df.<span class="fn">drop</span>(train.index) \
     <li>You sanity-checked its first predictions.</li>
   </ul>
   <p class="lede" style="margin-top: 24px; font-size: 26px;">Next session, prove it beat the baseline, then ship it.</p>
-  <div class="slide-footer"><span>Session 5, Recap</span><span>08 / 08</span></div>
+  <div class="slide-footer"><span>Session 5, Recap</span><span>10 / 10</span></div>
 </section>
 
 <!-- STOP -->
